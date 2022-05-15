@@ -42,7 +42,8 @@ Workshop 14 14:30 - 16:30
 
 ---
 ## Report and Software Design Diagrams:
- 
+
+The report link is at https://www.overleaf.com/3295722264jqmccgwbfwtm
 
 ---
 ## Software Installaition and Running:

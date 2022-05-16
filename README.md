@@ -44,6 +44,7 @@ Workshop 14 14:30 - 16:30
 ## Report and Software Design Diagrams:
 
 The report link is at https://www.overleaf.com/3295722264jqmccgwbfwtm
+Notion Link: https://www.notion.so/Assignment2-e7975df0c393437e980677258291ae21
 
 ---
 ## Software Installaition and Running:

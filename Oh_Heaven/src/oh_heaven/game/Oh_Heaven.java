@@ -123,11 +123,11 @@ public class Oh_Heaven extends CardGame {
 	 * 更新用于rendering 的 Scores 的 Array， ！大概率没有用
 	 * @param player
 	 */
-	private void updateScore(int player) {
+	private void updateScoreGraphics(int player) {
 		removeActor(scoreActors[player]);
 		String text = "[" + String.valueOf(scores[player]) + "]" + String.valueOf(tricks[player]) + "/"
 				+ String.valueOf(bids[player]);
-		scoreActors[player] = new TextActor(text, Color.WHITE, bgColor, bigFont);
+		scoreActors[player] = new TextActor(text, Color.WHITE, bgColor, bigFont);   
 		addActor(scoreActors[player], scoreLocations[player]);
 	}
 
@@ -235,21 +235,25 @@ public class Oh_Heaven extends CardGame {
 		addActor(trumpsActor, trumpsActorLocation);//图像交互相关
 		// End trump suit
 		
-		Hand trick;
-		int winner;
-		Card winningCard;
-		Suit lead;
+		Hand trick; // 这一回合出过的牌
+		int winner;// 这一回合的赢家
+		Card winningCard;// 决胜的牌
+		Suit lead;// 这一回合第一个人错的
 
 		int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 
 		initBids(trumps, nextPlayer);
 		// initScore();
 		for (int i = 0; i < nbPlayers; i++)
-			updateScore(i);
+			updateScoreGraphics(i);
+
+	
+		// 当前回合的Lead
 		for (int i = 0; i < nbStartCards; i++) {
 			trick = new Hand(deck);
 			selected = null;
 			// if (false) {
+			// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
 			if (0 == nextPlayer) { // Select lead depending on player type
 				hands[0].setTouchEnabled(true);
 				setStatus("Player 0 double-click on card to lead.");
@@ -277,6 +281,7 @@ public class Oh_Heaven extends CardGame {
 				if (++nextPlayer >= nbPlayers)
 					nextPlayer = 0; // From last back to first
 				selected = null;
+				// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
 				// if (false) {
 				if (0 == nextPlayer) {
 					hands[0].setTouchEnabled(true);
@@ -332,7 +337,7 @@ public class Oh_Heaven extends CardGame {
 			nextPlayer = winner;
 			setStatusText("Player " + nextPlayer + " wins trick.");
 			tricks[nextPlayer]++;
-			updateScore(nextPlayer);
+			updateScoreGraphics(nextPlayer);
 		}
 		removeActor(trumpsActor);
 	}
@@ -357,7 +362,7 @@ public class Oh_Heaven extends CardGame {
 		;
 
 		for (int i = 0; i < nbPlayers; i++)
-			updateScore(i);
+			updateScoreGraphics(i);
 		int maxScore = 0;
 		for (int i = 0; i < nbPlayers; i++)
 			if (scores[i] > maxScore)

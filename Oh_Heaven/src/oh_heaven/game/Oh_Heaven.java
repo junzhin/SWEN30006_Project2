@@ -164,7 +164,7 @@ public class Oh_Heaven extends CardGame {
 
 	
 	/**
-	 * 
+	 *  初始化 bids 值
 	 * @param trumps
 	 * @param nextPlayer
 	 */
@@ -240,6 +240,8 @@ public class Oh_Heaven extends CardGame {
 		Card winningCard;// 决胜的牌
 		Suit lead;// 这一回合第一个人错的
 
+		RoundInfo roundInfo = new RoundInfo(trumps);
+
 		int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 
 		initBids(trumps, nextPlayer);
@@ -265,6 +267,8 @@ public class Oh_Heaven extends CardGame {
 				selected = randomCard(hands[nextPlayer]);
 			}
 
+
+
 			// Lead with selected card
 			trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards() + 2) * trickWidth));
 			trick.draw();
@@ -275,8 +279,17 @@ public class Oh_Heaven extends CardGame {
 			selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 			winner = nextPlayer;
 			winningCard = selected;
+
 			// End Lead
 
+			// 更新数据到round info， 首玩家
+			roundInfo.cardPlayed(nextPlayer, selected);
+			roundInfo.setLead(lead);
+			roundInfo.setCurrentWinner(winner);
+			roundInfo.setCurrentWinningCard(winningCard);
+			//TODO  更新 players 的分数
+
+			// 其他players的出牌逻辑
 			for (int j = 1; j < nbPlayers; j++) {
 				if (++nextPlayer >= nbPlayers)
 					nextPlayer = 0; // From last back to first
@@ -310,6 +323,14 @@ public class Oh_Heaven extends CardGame {
 							System.out.println("A cheating player spoiled the game!");
 							System.exit(0);
 						}
+
+					// 更新数据到round info 每一个玩家
+					roundInfo.cardPlayed(nextPlayer, selected);
+					roundInfo.setLead(lead);
+					roundInfo.setCurrentWinner(winner);
+					roundInfo.setCurrentWinningCard(winningCard);
+
+					// TODO 更新 players 的分数
 				}
 
 				// End Check

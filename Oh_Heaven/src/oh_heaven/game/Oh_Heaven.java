@@ -86,6 +86,7 @@ public class Oh_Heaven extends CardGame {
 			// new Location(650, 575)
 			new Location(575, 575)
 	};
+	// 记录游戏交互界面玩家的当前的分数的信息
 	private Actor[] scoreActors = { null, null, null, null };
 	private final Location trickLocation = new Location(350, 350);
 	private final Location textLocation = new Location(350, 450);
@@ -99,8 +100,11 @@ public class Oh_Heaven extends CardGame {
 		setStatusText(string);
 	}
 
+	// 记录玩家的分数
 	private int[] scores = new int[nbPlayers];
+	// 当前当前一回合比赛进行中玩家已经赢得的次数
 	private int[] tricks = new int[nbPlayers];
+	// 记录每个玩家的预测能够赢得比赛次数（一共三个回合）
 	private int[] bids = new int[nbPlayers];
 
 	Font bigFont = new Font("Serif", Font.BOLD, 36);
@@ -115,6 +119,10 @@ public class Oh_Heaven extends CardGame {
 		}
 	}
 
+	/**
+	 * 更新用于rendering 的 Scores 的 Array， ！大概率没有用
+	 * @param player
+	 */
 	private void updateScore(int player) {
 		removeActor(scoreActors[player]);
 		String text = "[" + String.valueOf(scores[player]) + "]" + String.valueOf(tricks[player]) + "/"
@@ -123,12 +131,20 @@ public class Oh_Heaven extends CardGame {
 		addActor(scoreActors[player], scoreLocations[player]);
 	}
 
+
+	/***
+	 *  复原用于记录的scores 的 array
+	 */
 	private void initScores() {
 		for (int i = 0; i < nbPlayers; i++) {
 			scores[i] = 0;
 		}
 	}
 
+
+	/**
+	 *  更新玩家对应当前的游戏分数
+	 */
 	private void updateScores() {
 		for (int i = 0; i < nbPlayers; i++) {
 			scores[i] += tricks[i];
@@ -137,12 +153,21 @@ public class Oh_Heaven extends CardGame {
 		}
 	}
 
+	/**
+	 *  重置记录赢得比赛次数的array， 每一回合重置一次
+	 */
 	private void initTricks() {
 		for (int i = 0; i < nbPlayers; i++) {
 			tricks[i] = 0;
 		}
 	}
 
+	
+	/**
+	 * 
+	 * @param trumps
+	 * @param nextPlayer
+	 */
 	private void initBids(Suit trumps, int nextPlayer) {
 		int total = 0;
 		for (int i = nextPlayer; i < nextPlayer + nbPlayers; i++) {
@@ -200,16 +225,23 @@ public class Oh_Heaven extends CardGame {
 	}
 
 	private void playRound() {
+
+
 		// Select and display trump suit
+		// 随机选择random trump Suit
 		final Suit trumps = randomEnum(Suit.class);
 		final Actor trumpsActor = new Actor("sprites/" + trumpImage[trumps.ordinal()]);
-		addActor(trumpsActor, trumpsActorLocation);
+
+		addActor(trumpsActor, trumpsActorLocation);//图像交互相关
 		// End trump suit
+		
 		Hand trick;
 		int winner;
 		Card winningCard;
 		Suit lead;
+
 		int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
+
 		initBids(trumps, nextPlayer);
 		// initScore();
 		for (int i = 0; i < nbPlayers; i++)
@@ -228,16 +260,19 @@ public class Oh_Heaven extends CardGame {
 				delay(thinkingTime);
 				selected = randomCard(hands[nextPlayer]);
 			}
+
 			// Lead with selected card
 			trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards() + 2) * trickWidth));
 			trick.draw();
 			selected.setVerso(false);
+
 			// No restrictions on the card being lead
 			lead = (Suit) selected.getSuit();
 			selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 			winner = nextPlayer;
 			winningCard = selected;
 			// End Lead
+
 			for (int j = 1; j < nbPlayers; j++) {
 				if (++nextPlayer >= nbPlayers)
 					nextPlayer = 0; // From last back to first
@@ -271,6 +306,7 @@ public class Oh_Heaven extends CardGame {
 							System.exit(0);
 						}
 				}
+
 				// End Check
 				selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 				System.out.println("winning: " + winningCard);
@@ -289,6 +325,7 @@ public class Oh_Heaven extends CardGame {
 				}
 				// End Follow
 			}
+
 			delay(600);
 			trick.setView(this, new RowLayout(hideLocation, 0));
 			trick.draw();

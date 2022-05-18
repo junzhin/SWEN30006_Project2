@@ -13,7 +13,7 @@ NERDI have a fully running version of the game, but the design is not very exten
 
 ---
 
- ![](assets/16524482539111.jpg)
+![](assets/16524482539111.jpg)
 ![](assets/16524482643928.jpg)
 
 

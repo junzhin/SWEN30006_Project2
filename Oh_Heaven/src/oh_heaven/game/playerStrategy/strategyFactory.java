@@ -15,7 +15,7 @@ public class strategyFactory {
 
     public AbleToPlayCard getStrategyImplementation(StrategyType strategyType) {
         switch (strategyType) {
-            case StrategyType.smart:
+            case smart:
                 newStrategy = new smartStrategy();
                 break;
             case random:

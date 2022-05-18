@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.naming.InitialContext;
+
 @SuppressWarnings("serial")
 public class Oh_Heaven extends CardGame {
 
@@ -67,7 +69,7 @@ public class Oh_Heaven extends CardGame {
 
 	private final String version = "1.0";
 	public final int nbPlayers = 4;
-	public final int nbStartCards = 13;
+	public  int nbStartCards = 13;
 	public final int nbRounds = 3;
 	public final int madeBidBonus = 10;
 	private final int handWidth = 400;
@@ -102,9 +104,9 @@ public class Oh_Heaven extends CardGame {
 
 	// 记录玩家的分数
 	private int[] scores = new int[nbPlayers];
-	// 当前当前一回合比赛进行中玩家已经赢得的次数
+	// 当前一场比赛中 的已经赢得回合的数量
 	private int[] tricks = new int[nbPlayers];
-	// 记录每个玩家的预测能够赢得比赛次数（一共三个回合）
+	// 在一场比赛中， 预测的能够赢回合的总次数 （一共三个回合）
 	private int[] bids = new int[nbPlayers];
 
 	Font bigFont = new Font("Serif", Font.BOLD, 36);
@@ -363,10 +365,14 @@ public class Oh_Heaven extends CardGame {
 		removeActor(trumpsActor);
 	}
 
-	public Oh_Heaven() {
+	public Oh_Heaven(Properties gameProperies) {
 		super(700, 700, 30);
 		setTitle("Oh_Heaven (V" + version + ") Constructed for UofM SWEN30006 with JGameGrid (www.aplu.ch)");
 		setStatusText("Initializing...");
+
+		// 初始化对应的游戏的数据
+		initialiseProperties(gameProperies);
+
 
 		// 两种functions 的不同是一个用于显示， 一个是用于记录
 		initScores();
@@ -408,15 +414,25 @@ public class Oh_Heaven extends CardGame {
 		refresh();
 	}
 
+	private  void initialiseProperties(Properties properties){
+		
+	// Load the relevant parameters from the peroperties files before starting the game
+		this.nbStartCards = properties.getProperty("nbStartCards") == null ? nbStartCards: Integer.parseInt(properties.getProperty("nbStartCards"));
+
+		// ToDo: other parameters to load from the properties file (Similar to the above situation)
+
+	}
+
 	public static void main(String[] args) {
 		// System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		final Properties properties;
-		if (args == null || args.length == 0) {
-			// properties = PropertiesLoader.loadPropertiesFile(null);
+		if (args == null || args.length == 0) { 
+			properties = PropertiesLoader.loadPropertiesFile(null);
 		} else {
-			// properties = PropertiesLoader.loadPropertiesFile(args[0]);
+			properties = PropertiesLoader.loadPropertiesFile(args[0]);
 		}
-		new Oh_Heaven();
+		// Add the parameters to game main program
+		new Oh_Heaven(properties);
 	}
 
 }

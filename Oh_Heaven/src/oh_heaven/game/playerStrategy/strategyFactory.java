@@ -1,12 +1,8 @@
 package oh_heaven.game.playerStrategy;
 
-enum StrategyType {
-    smart,
-    random,
-    legal,
-}
 
 public class strategyFactory {
+
     private static strategyFactory instance = null;
     private AbleToPlayCard newStrategy = null;
     
@@ -17,10 +13,9 @@ public class strategyFactory {
         return instance;
     }
 
-    public AbleToPlayCard getDisneyAdapter(StrategyType strategyType) {
-        
+    public AbleToPlayCard getStrategyImplementation(StrategyType strategyType) {
         switch (strategyType) {
-            case smart:
+            case StrategyType.smart:
                 newStrategy = new smartStrategy();
                 break;
             case random:

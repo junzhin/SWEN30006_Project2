@@ -15,11 +15,11 @@ public class HumanPlayer extends Player {
         
         hand.setTouchEnabled(true);
 
-        super.selectedCard = null;
+        selectedCard = null;
 
         hand.setTouchEnabled(false);
 
-        return super.selectedCard;
+        return selectedCard;
 
 
   

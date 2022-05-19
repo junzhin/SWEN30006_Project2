@@ -9,69 +9,44 @@ import java.awt.Font;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.naming.InitialContext;
-
 @SuppressWarnings("serial")
+
 public class Oh_Heaven extends CardGame {
 
+
+	/*******Defintions of Graphical Settings, Constants and Variables ********/
+	// 定义受手牌的花色
 	public enum Suit {
 		SPADES, HEARTS, DIAMONDS, CLUBS
 	}
 
+	// 定义rank
 	public enum Rank {
 		// Reverse order of rank importance (see rankGreater() below)
 		// Order of cards is tied to card images
 		ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
 	}
 
+	// 图像对应的花色， 用于游戏graphical purposes
 	final String trumpImage[] = { "bigspade.gif", "bigheart.gif", "bigdiamond.gif", "bigclub.gif" };
 
-	static public final int seed = 30006;
+	// 随机seeds 设置
+	public final int seed = 30006;
 	static final Random random = new Random(seed);
 
-	// return random Enum value
-	public static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
-		int x = random.nextInt(clazz.getEnumConstants().length);
-		return clazz.getEnumConstants()[x];
-	}
 
-	// return random Card from Hand
-	public static Card randomCard(Hand hand) {
-		int x = random.nextInt(hand.getNumberOfCards());
-		return hand.get(x);
-	}
-
-	// return random Card from ArrayList
-	public static Card randomCard(ArrayList<Card> list) {
-		int x = random.nextInt(list.size());
-		return list.get(x);
-	}
-
-	private void dealingOut(Hand[] hands, int nbPlayers, int nbCardsPerPlayer) {
-		Hand pack = deck.toHand(false);
-		// pack.setView(Oh_Heaven.this, new RowLayout(hideLocation, 0));
-		for (int i = 0; i < nbCardsPerPlayer; i++) {
-			for (int j = 0; j < nbPlayers; j++) {
-				if (pack.isEmpty())
-					return;
-				Card dealt = randomCard(pack);
-				// System.out.println("Cards = " + dealt);
-				dealt.removeFromHand(false);
-				hands[j].insert(dealt, false);
-				// dealt.transfer(hands[j], true);
-			}
-		}
-	}
-
-	public boolean rankGreater(Card card1, Card card2) {
-		return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
-	}
 
 	private final String version = "1.0";
+	// 玩家数量
 	public final int nbPlayers = 4;
-	public  int nbStartCards = 13;
-	public final int nbRounds = 3;
+	// 每个玩家的数量
+	public int nbStartCards = 13;
+	// 每局游戏的轮数
+	public int nbRounds = 3;
+	// 当赢得回合数量与预测胜利回合数量相等的时候的格外奖励
 	public final int madeBidBonus = 10;
+
+	// 图像的设置
 	private final int handWidth = 400;
 	private final int trickWidth = 40;
 	private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
@@ -96,6 +71,8 @@ public class Oh_Heaven extends CardGame {
 	private Hand[] hands;
 	private Location hideLocation = new Location(-500, -500);
 	private Location trumpsActorLocation = new Location(50, 50);
+
+	// 是否设置游戏需要施加游戏规则， *不确定(需要configure)
 	private boolean enforceRules = false;
 
 	public void setStatus(String string) {
@@ -111,7 +88,55 @@ public class Oh_Heaven extends CardGame {
 
 	Font bigFont = new Font("Serif", Font.BOLD, 36);
 
-	private void initScore() {
+	/*****End of  Defintions of Graphical Settings, Constants and Variables *****/
+
+
+	
+
+	/******************Helper Functions**************/
+
+	// 回合开始的时候随机发牌
+	private void dealingOut(Hand[] hands, int nbPlayers, int nbCardsPerPlayer) {
+		Hand pack = deck.toHand(false);
+		// pack.setView(Oh_Heaven.this, new RowLayout(hideLocation, 0));
+		for (int i = 0; i < nbCardsPerPlayer; i++) {
+			for (int j = 0; j < nbPlayers; j++) {
+				if (pack.isEmpty())
+					return;
+				Card dealt = randomCard(pack);
+				// System.out.println("Cards = " + dealt);
+				dealt.removeFromHand(false);
+				hands[j].insert(dealt, false);
+				// dealt.transfer(hands[j], true);
+			}
+		}
+	}
+
+	// 用于比较两张手牌的大小
+	public boolean rankGreater(Card card1, Card card2) {
+		return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
+	}
+
+	// return random Enum value
+	public static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
+		int x = random.nextInt(clazz.getEnumConstants().length);
+		return clazz.getEnumConstants()[x];
+	}
+
+	// return random Card from Hand
+	public static Card randomCard(Hand hand) {
+		int x = random.nextInt(hand.getNumberOfCards());
+		return hand.get(x);
+	}
+
+	// return random Card from ArrayList
+	public static Card randomCard(ArrayList<Card> list) {
+		int x = random.nextInt(list.size());
+		return list.get(x);
+	}
+
+
+	private void initScoreForGraphicalPurpose() {
 		for (int i = 0; i < nbPlayers; i++) {
 			// scores[i] = 0;
 			String text = "[" + String.valueOf(scores[i]) + "]" + String.valueOf(tricks[i]) + "/"
@@ -120,6 +145,10 @@ public class Oh_Heaven extends CardGame {
 			addActor(scoreActors[i], scoreLocations[i]);
 		}
 	}
+
+	/****************** End Of Helper Functions **************/
+	
+
 
 	/**
 	 * 更新用于rendering 的 Scores 的 Array， ！大概率没有用
@@ -313,6 +342,7 @@ public class Oh_Heaven extends CardGame {
 				trick.draw();
 				selected.setVerso(false); // In case it is upside down
 				// Check: Following card must follow suit if possible
+				// 这里应该是有关游戏规则的检查的设置， 看花色是否等于lead 的花色， 如果不是检查玩家手牌中有没有与lead 花色一致的手牌， 没有则违反规则
 				if (selected.getSuit() != lead && hands[nextPlayer].getNumberOfCardsWithSuit(lead) > 0) {
 					// Rule violation
 					String violation = "Follow rule broken by player " + nextPlayer + " attempting to play " + selected;
@@ -376,7 +406,7 @@ public class Oh_Heaven extends CardGame {
 
 		// 两种functions 的不同是一个用于显示， 一个是用于记录
 		initScores();
-		initScore();
+		initScoreForGraphicalPurpose();
 
 		// 开始进行每一轮的记录
 		for (int i = 0; i < nbRounds; i++) {
@@ -417,10 +447,18 @@ public class Oh_Heaven extends CardGame {
 	private  void initialiseProperties(Properties properties){
 		
 	// Load the relevant parameters from the peroperties files before starting the game
-		this.nbStartCards = properties.getProperty("nbStartCards") == null ? nbStartCards: Integer.parseInt(properties.getProperty("nbStartCards"));
+		this.nbStartCards = properties.getProperty("nbStartCards") == null ? this.nbStartCards: Integer.parseInt(properties.getProperty("nbStartCards"));
 
 		// ToDo: other parameters to load from the properties file (Similar to the above situation)
 
+		this.enforceRules = properties.getProperty("enforceRules") == null? 
+				this.enforceRules : Boolean.parseBoolean(properties.getProperty("enforceRules"));
+
+		this.nbRounds = properties.getProperty("rounds") == null ? this.nbRounds
+				: Integer.parseInt(properties.getProperty("rounds"));
+
+		this.seed = properties.getProperty("seed") == null? this.seed: Integer.parseInt(properties.getProperty("seed"));
+		
 	}
 
 	public static void main(String[] args) {

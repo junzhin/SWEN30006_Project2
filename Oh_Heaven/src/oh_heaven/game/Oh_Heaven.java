@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("serial")
 
 public class Oh_Heaven extends CardGame {
-
+	/*=============================================================================================================== */
 
 	/*******Defintions of Graphical Settings, Constants and Variables ********/
 	// 定义受手牌的花色
@@ -92,6 +92,7 @@ public class Oh_Heaven extends CardGame {
 
 	/*****End of  Defintions of Graphical Settings, Constants and Variables *****/
 
+	/*=============================================================================================================== */
 
 	/******************Helper Functions**************/
 
@@ -140,6 +141,7 @@ public class Oh_Heaven extends CardGame {
 
 	/****************** End Of Helper Functions **************/
 
+	/*=============================================================================================================== */
 
 	/****************** Initialization and Updating **************/
 	/***
@@ -257,7 +259,7 @@ public class Oh_Heaven extends CardGame {
 
 
 	/**
-	 * 更新用于rendering 的 Scores 的 Array， ！大概率没有用
+	 * 更新用于graphical rendering 的 Scores 的 Array， ！大概率没有用
 	 * @param player
 	 */
 	private void updateScoreGraphics(int player) {
@@ -281,6 +283,8 @@ public class Oh_Heaven extends CardGame {
 	}
 
 	/****************** End of Initialization and Updating **************/
+
+	/*=============================================================================================================== */
 
 	/****One Round of the game ****/
 
@@ -425,6 +429,10 @@ public class Oh_Heaven extends CardGame {
 	}
 
 	/**** End of One Round of the game ****/
+	/*
+	 * =============================================================================
+	 * ==================================
+	 */
 
 	/**** Running Process of the Game Program *****/
 	public Oh_Heaven(Properties gameProperies) {
@@ -477,6 +485,7 @@ public class Oh_Heaven extends CardGame {
 	}
 
 	/**** End of Running Process of the Game Program *****/
+	/*=============================================================================================================== */
 
 
 	/**** Main Function of the game ****/
@@ -488,7 +497,7 @@ public class Oh_Heaven extends CardGame {
 		} else {
 			properties = PropertiesLoader.loadPropertiesFile(args[0]);
 		}
-		// Add the parameters to game main program
+		// Add the parameters to game main program and Run the main game Program
 		new Oh_Heaven(properties);
 	}
 

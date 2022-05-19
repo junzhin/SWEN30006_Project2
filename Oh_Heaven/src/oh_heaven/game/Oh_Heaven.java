@@ -30,12 +30,6 @@ public class Oh_Heaven extends CardGame {
 	// 图像对应的花色， 用于游戏graphical purposes
 	final String trumpImage[] = { "bigspade.gif", "bigheart.gif", "bigdiamond.gif", "bigclub.gif" };
 
-	// 随机seeds 设置
-	public final int seed = 30006;
-	static final Random random = new Random(seed);
-
-
-
 	private final String version = "1.0";
 	// 玩家数量
 	public final int nbPlayers = 4;
@@ -45,6 +39,11 @@ public class Oh_Heaven extends CardGame {
 	public int nbRounds = 3;
 	// 当赢得回合数量与预测胜利回合数量相等的时候的格外奖励
 	public final int madeBidBonus = 10;
+	
+	
+
+	// 随机seeds 设置
+	public static int seed = 30006;
 
 	// 图像的设置
 	private final int handWidth = 400;
@@ -88,10 +87,11 @@ public class Oh_Heaven extends CardGame {
 
 	Font bigFont = new Font("Serif", Font.BOLD, 36);
 
+	// Setting random seed for the game behaviour
+	private static Random random = new Random(seed);
+
 	/*****End of  Defintions of Graphical Settings, Constants and Variables *****/
 
-
-	
 
 	/******************Helper Functions**************/
 
@@ -136,6 +136,30 @@ public class Oh_Heaven extends CardGame {
 	}
 
 
+
+
+	/****************** End Of Helper Functions **************/
+
+
+	/****************** Initialization and Updating **************/
+	/***
+	 * 复原用于记录的scores 的 array
+	 */
+	private void initScores() {
+		for (int i = 0; i < nbPlayers; i++) {
+			scores[i] = 0;
+		}
+	}
+
+	/**
+	 * 重置记录赢得比赛次数的array， 每一回合重置一次
+	 */
+	private void initTricks() {
+		for (int i = 0; i < nbPlayers; i++) {
+			tricks[i] = 0;
+		}
+	}
+	
 	private void initScoreForGraphicalPurpose() {
 		for (int i = 0; i < nbPlayers; i++) {
 			// scores[i] = 0;
@@ -146,56 +170,31 @@ public class Oh_Heaven extends CardGame {
 		}
 	}
 
-	/****************** End Of Helper Functions **************/
-	
 
+	private void initialiseProperties(Properties properties) {
 
-	/**
-	 * 更新用于rendering 的 Scores 的 Array， ！大概率没有用
-	 * @param player
-	 */
-	private void updateScoreGraphics(int player) {
-		removeActor(scoreActors[player]);
-		String text = "[" + String.valueOf(scores[player]) + "]" + String.valueOf(tricks[player]) + "/"
-				+ String.valueOf(bids[player]);
-		scoreActors[player] = new TextActor(text, Color.WHITE, bgColor, bigFont);   
-		addActor(scoreActors[player], scoreLocations[player]);
-	}
+		// Load the relevant parameters from the peroperties files before starting the
+		// game
+		this.nbStartCards = properties.getProperty("nbStartCards") == null ? this.nbStartCards
+				: Integer.parseInt(properties.getProperty("nbStartCards"));
 
+		// ToDo: other parameters to load from the properties file (Similar to the above
+		// situation)
 
-	/***
-	 *  复原用于记录的scores 的 array
-	 */
-	private void initScores() {
-		for (int i = 0; i < nbPlayers; i++) {
-			scores[i] = 0;
-		}
-	}
+		this.enforceRules = properties.getProperty("enforceRules") == null ? this.enforceRules
+				: Boolean.parseBoolean(properties.getProperty("enforceRules"));
 
+		this.nbRounds = properties.getProperty("rounds") == null ? this.nbRounds
+				: Integer.parseInt(properties.getProperty("rounds"));
 
-	/**
-	 *  更新玩家对应当前的游戏分数
-	 */
-	private void updateScores() {
-		for (int i = 0; i < nbPlayers; i++) {
-			scores[i] += tricks[i];
-			if (tricks[i] == bids[i])
-				scores[i] += madeBidBonus;
-		}
+		this.seed = properties.getProperty("seed") == null ? this.seed
+				: Integer.parseInt(properties.getProperty("seed"));
+
 	}
 
 	/**
-	 *  重置记录赢得比赛次数的array， 每一回合重置一次
-	 */
-	private void initTricks() {
-		for (int i = 0; i < nbPlayers; i++) {
-			tricks[i] = 0;
-		}
-	}
-
-	
-	/**
-	 *  初始化 bids 值
+	 * 初始化 bids 值
+	 * 
 	 * @param trumps
 	 * @param nextPlayer
 	 */
@@ -254,6 +253,36 @@ public class Oh_Heaven extends CardGame {
 		// hands[i].setVerso(true); // You do not need to use or change this code.
 		// End graphics
 	}
+
+
+
+	/**
+	 * 更新用于rendering 的 Scores 的 Array， ！大概率没有用
+	 * @param player
+	 */
+	private void updateScoreGraphics(int player) {
+		removeActor(scoreActors[player]);
+		String text = "[" + String.valueOf(scores[player]) + "]" + String.valueOf(tricks[player]) + "/"
+				+ String.valueOf(bids[player]);
+		scoreActors[player] = new TextActor(text, Color.WHITE, bgColor, bigFont);   
+		addActor(scoreActors[player], scoreLocations[player]);
+	}
+
+
+	/**
+	 *  更新玩家对应当前的游戏分数的数组
+	 */
+	private void updateScores() {
+		for (int i = 0; i < nbPlayers; i++) {
+			scores[i] += tricks[i];
+			if (tricks[i] == bids[i])
+				scores[i] += madeBidBonus;
+		}
+	}
+
+	/****************** End of Initialization and Updating **************/
+
+	/****One Round of the game ****/
 
 	private void playRound() {
 
@@ -395,6 +424,9 @@ public class Oh_Heaven extends CardGame {
 		removeActor(trumpsActor);
 	}
 
+	/**** End of One Round of the game ****/
+
+	/**** Running Process of the Game Program *****/
 	public Oh_Heaven(Properties gameProperies) {
 		super(700, 700, 30);
 		setTitle("Oh_Heaven (V" + version + ") Constructed for UofM SWEN30006 with JGameGrid (www.aplu.ch)");
@@ -444,23 +476,10 @@ public class Oh_Heaven extends CardGame {
 		refresh();
 	}
 
-	private  void initialiseProperties(Properties properties){
-		
-	// Load the relevant parameters from the peroperties files before starting the game
-		this.nbStartCards = properties.getProperty("nbStartCards") == null ? this.nbStartCards: Integer.parseInt(properties.getProperty("nbStartCards"));
+	/**** End of Running Process of the Game Program *****/
 
-		// ToDo: other parameters to load from the properties file (Similar to the above situation)
 
-		this.enforceRules = properties.getProperty("enforceRules") == null? 
-				this.enforceRules : Boolean.parseBoolean(properties.getProperty("enforceRules"));
-
-		this.nbRounds = properties.getProperty("rounds") == null ? this.nbRounds
-				: Integer.parseInt(properties.getProperty("rounds"));
-
-		this.seed = properties.getProperty("seed") == null? this.seed: Integer.parseInt(properties.getProperty("seed"));
-		
-	}
-
+	/**** Main Function of the game ****/
 	public static void main(String[] args) {
 		// System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		final Properties properties;
@@ -472,5 +491,8 @@ public class Oh_Heaven extends CardGame {
 		// Add the parameters to game main program
 		new Oh_Heaven(properties);
 	}
+
+	// Getters and Setters
+
 
 }

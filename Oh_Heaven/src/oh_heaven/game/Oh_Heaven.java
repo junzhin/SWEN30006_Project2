@@ -430,9 +430,8 @@ public class Oh_Heaven extends CardGame {
 
 	/**** End of One Round of the game ****/
 	/*
-	 * =============================================================================
-	 * ==================================
-	 */
+	 * ==============================================================================================================*/
+	 
 
 	/**** Running Process of the Game Program *****/
 	public Oh_Heaven(Properties gameProperies) {

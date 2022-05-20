@@ -6,6 +6,7 @@ import ch.aplu.jcardgame.*;
 import ch.aplu.jgamegrid.*;
 import java.awt.Color;
 import java.awt.Font;
+import java.nio.file.SecureDirectoryStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -187,10 +188,18 @@ public class Oh_Heaven extends CardGame {
 				: Boolean.parseBoolean(properties.getProperty("enforceRules"));
 
 		this.nbRounds = properties.getProperty("rounds") == null ? this.nbRounds
-				: Integer.parseInt(properties.getProperty("rounds"));
+			: Integer.parseInt(properties.getProperty("rounds"));
 
-		this.seed = properties.getProperty("seed") == null ? this.seed
+		seed = properties.getProperty("seed") == null ? seed
 				: Integer.parseInt(properties.getProperty("seed"));
+				
+		System.out.println("before infor");
+		System.out.println(seed);
+
+		random = new Random(seed);
+
+	
+	
 
 	}
 
@@ -287,6 +296,7 @@ public class Oh_Heaven extends CardGame {
 	/*=============================================================================================================== */
 
 	/****One Round of the game ****/
+
 
 	private void playRound() {
 
@@ -441,6 +451,7 @@ public class Oh_Heaven extends CardGame {
 
 		// 初始化对应的游戏的数据
 		initialiseProperties(gameProperies);
+		System.out.println(seed);
 
 
 		// 两种functions 的不同是一个用于显示， 一个是用于记录
@@ -497,6 +508,7 @@ public class Oh_Heaven extends CardGame {
 			properties = PropertiesLoader.loadPropertiesFile(args[0]);
 		}
 		// Add the parameters to game main program and Run the main game Program
+	
 		new Oh_Heaven(properties);
 	}
 

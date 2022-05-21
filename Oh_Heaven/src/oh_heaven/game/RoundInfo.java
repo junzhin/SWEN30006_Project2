@@ -7,19 +7,20 @@ import ch.aplu.jcardgame.Card;
 import oh_heaven.game.Oh_Heaven.Suit;
 
 public class RoundInfo {
-    private Suit currentTrump = null;
+    private Suit currentTrump;
+
     private int currentWinner;
     private Card currentWinningCard;
     private Suit lead;
 
     private HashMap<Integer, HashSet<Card>> cardsPlayed;
 
-    private int[] ScoresForPlayers;
+    private ArrayList<Integer> ScoresForPlayers;
 
-    public RoundInfo() {
-        // this.currentTrump = Trump;
+    public RoundInfo(Suit Trump) {
+        this.currentTrump = Trump;
         this.cardsPlayed = new HashMap<>();
-        this.ScoresForPlayers = null; 
+        this.ScoresForPlayers = new ArrayList<>();
     }
  
 
@@ -35,7 +36,6 @@ public class RoundInfo {
         }
 
     }
-
 
 
     public Suit getCurrentTrump() {
@@ -103,30 +103,18 @@ public class RoundInfo {
         return this;
     }
 
-    public int[] getScoresForPlayers() {
+    public ArrayList<Integer> getScoresForPlayers() {
         return this.ScoresForPlayers;
     }
 
-    public void setScoresForPlayers(int[] ScoresForPlayers) {
+    public void setScoresForPlayers(ArrayList<Integer> ScoresForPlayers) {
         this.ScoresForPlayers = ScoresForPlayers;
     }
 
-    public RoundInfo ScoresForPlayers(int[] ScoresForPlayers) {
+    public RoundInfo ScoresForPlayers(ArrayList<Integer> ScoresForPlayers) {
         setScoresForPlayers(ScoresForPlayers);
         return this;
     }
 
 
-    @Override
-    public String toString() {
-        return "{" +
-            " currentTrump='" + getCurrentTrump() + "'" +
-            ", currentWinner='" + getCurrentWinner() + "'" +
-            ", currentWinningCard='" + getCurrentWinningCard() + "'" +
-            ", lead='" + getLead() + "'" +
-            ", cardsPlayed='" + getCardsPlayed() + "'" +
-            ", ScoresForPlayers='" + getScoresForPlayers() + "'" +
-            "}";
-    }
-     
 }

@@ -195,10 +195,8 @@ public class Oh_Heaven extends CardGame {
 		this.nbRounds = properties.getProperty("rounds") == null ? this.nbRounds
 				: Integer.parseInt(properties.getProperty("rounds"));
 
-		// reassign the seed value to random class
-		seed = properties.getProperty("seed") == null ? seed: Integer.parseInt(properties.getProperty("seed"));
-		random = new Random(seed);
-		
+		this.seed = properties.getProperty("seed") == null ? this.seed
+				: Integer.parseInt(properties.getProperty("seed"));
 		playerType.addAll(PropertiesLoader.loadPlayerTypes(properties));
 
 	}
@@ -281,15 +279,12 @@ public class Oh_Heaven extends CardGame {
 	/**
 	 *  更新玩家对应当前的游戏分数的数组
 	 */
-	private void updateScores(RoundInfo roundinfo) {
+	private void updateScores() {
 		for (int i = 0; i < nbPlayers; i++) {
 			scores[i] += tricks[i];
 			if (tricks[i] == bids[i])
 				scores[i] += madeBidBonus;
 		}
-
-		roundinfo.setScoresForPlayers(scores);
-		 
 	}
 
 	/****************** End of Initialization and Updating **************/
@@ -298,15 +293,13 @@ public class Oh_Heaven extends CardGame {
 
 	/****One Round of the game ****/
 
-	private void playRound(RoundInfo roundInfo) {
+	private void playRound() {
 
 
 		// Select and display trump suit
 		// 随机选择random trump Suit
 		final Suit trumps = randomEnum(Suit.class);
 		final Actor trumpsActor = new Actor("sprites/" + trumpImage[trumps.ordinal()]);
-
-		
 
 		addActor(trumpsActor, trumpsActorLocation);//图像交互相关
 		// End trump suit
@@ -316,8 +309,7 @@ public class Oh_Heaven extends CardGame {
 		Card winningCard;// 决胜的牌
 		Suit lead;// 这一回合第一个人错的
 
-		roundInfo.setCurrentTrump(trumps);
-
+		RoundInfo roundInfo = new RoundInfo(trumps);
 
 		int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 
@@ -365,7 +357,7 @@ public class Oh_Heaven extends CardGame {
 			roundInfo.setLead(lead);
 			roundInfo.setCurrentWinner(winner);
 			roundInfo.setCurrentWinningCard(winningCard);
-
+			//TODO  更新 players 的分数
 
 			// 其他players的出牌逻辑
 			for (int j = 1; j < nbPlayers; j++) {
@@ -404,6 +396,14 @@ public class Oh_Heaven extends CardGame {
 							System.exit(0);
 						}
 
+					// 更新数据到round info 每一个玩家
+					roundInfo.cardPlayed(nextPlayer, selected);
+					roundInfo.setLead(lead);
+					roundInfo.setCurrentWinner(winner);
+					roundInfo.setCurrentWinningCard(winningCard);
+
+					// TODO 更新 players 的分数
+
 				}
 
 				// End Check
@@ -422,12 +422,6 @@ public class Oh_Heaven extends CardGame {
 					winner = nextPlayer;
 					winningCard = selected;
 				}
-				// 更新数据到round info 每一个玩家
-				roundInfo.cardPlayed(nextPlayer, selected);
-				roundInfo.setLead(lead);
-				roundInfo.setCurrentWinner(winner);
-				roundInfo.setCurrentWinningCard(winningCard);
-
 				// End Follow
 			}
 
@@ -486,13 +480,12 @@ public class Oh_Heaven extends CardGame {
 		// 开始进行每一轮的记录
 		for (int i = 0; i < nbRounds; i++) {
 
-			RoundInfo roundInfo = new RoundInfo();
-
 			initTricks();
 			initRound();
-			playRound(roundInfo);
-			updateScores(roundInfo);
+			playRound();
+			updateScores();
 		}
+		;
 
 		for (int i = 0; i < nbPlayers; i++)
 			updateScoreGraphics(i);

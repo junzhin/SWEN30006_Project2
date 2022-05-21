@@ -17,9 +17,9 @@ public class NonHumanPlayer extends Player{
     }
 
     @Override
-    public Card playCard(RoundInfo roundInfo) {
+    public Card playOneCard(RoundInfo roundInfo) {
         // TODO Auto-generated method stub
-        return null;
+        return PLAYERSTRATEGY.generateOneMove(this,roundInfo);
     }
     
     

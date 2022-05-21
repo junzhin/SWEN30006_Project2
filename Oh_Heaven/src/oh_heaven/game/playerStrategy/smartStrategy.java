@@ -2,6 +2,7 @@ package oh_heaven.game.playerStrategy;
 
 import ch.aplu.jcardgame.Card;
 import oh_heaven.game.RoundInfo;
+import oh_heaven.game.player.Player;
 
 public class smartStrategy implements AbleToPlayCard {
 
@@ -10,8 +11,8 @@ public class smartStrategy implements AbleToPlayCard {
 
 
     @Override
-    public Card generateOneMove(RoundInfo currentRoundInfo) {
-        // TODO Auto-generated method stub
+    public Card generateOneMove(Player player, RoundInfo currentRoundInfo) {
+
         return null;
     }
     

@@ -4,6 +4,11 @@ package oh_heaven.game;
 
 import ch.aplu.jcardgame.*;
 import ch.aplu.jgamegrid.*;
+import oh_heaven.game.player.HumanPlayer;
+import oh_heaven.game.player.NonHumanPlayer;
+import oh_heaven.game.player.Player;
+import oh_heaven.game.playerStrategy.StrategyType;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.util.*;
@@ -39,8 +44,9 @@ public class Oh_Heaven extends CardGame {
 	public int nbRounds = 3;
 	// 当赢得回合数量与预测胜利回合数量相等的时候的格外奖励
 	public final int madeBidBonus = 10;
-	
-	
+
+	private ArrayList<String> playerType = new ArrayList<>();
+	private ArrayList<Player> players = new ArrayList<>();
 
 	// 随机seeds 设置
 	public static int seed = 30006;
@@ -191,6 +197,7 @@ public class Oh_Heaven extends CardGame {
 
 		this.seed = properties.getProperty("seed") == null ? this.seed
 				: Integer.parseInt(properties.getProperty("seed"));
+		playerType.addAll(PropertiesLoader.loadPlayerTypes(properties));
 
 	}
 
@@ -226,20 +233,18 @@ public class Oh_Heaven extends CardGame {
 		hands = new Hand[nbPlayers];
 		for (int i = 0; i < nbPlayers; i++) {
 			hands[i] = new Hand(deck);
+			players.get(i).setHand(hands[i]);
 		}
 		dealingOut(hands, nbPlayers, nbStartCards);
 		for (int i = 0; i < nbPlayers; i++) {
 			hands[i].sort(Hand.SortType.SUITPRIORITY, true);
 		}
-		// Set up human player for interaction
-		CardListener cardListener = new CardAdapter() // Human Player plays card
-		{
-			public void leftDoubleClicked(Card card) {
-				selected = card;
-				hands[0].setTouchEnabled(false);
+		/*check if player is a humna player, then set card listener*/
+		for (Player player: players) {
+			if (player instanceof HumanPlayer) {
+				((HumanPlayer)player).initialiseCardListener();
 			}
-		};
-		hands[0].addCardListener(cardListener);
+		}
 		// graphics
 		RowLayout[] layouts = new RowLayout[nbPlayers];
 		for (int i = 0; i < nbPlayers; i++) {
@@ -320,7 +325,7 @@ public class Oh_Heaven extends CardGame {
 			selected = null;
 			// if (false) {
 			// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
-			if (0 == nextPlayer) { // Select lead depending on player type
+			/*if (0 == nextPlayer) { // Select lead depending on player type
 				hands[0].setTouchEnabled(true);
 				setStatus("Player 0 double-click on card to lead.");
 				while (null == selected)
@@ -329,7 +334,8 @@ public class Oh_Heaven extends CardGame {
 				setStatusText("Player " + nextPlayer + " thinking...");
 				delay(thinkingTime);
 				selected = randomCard(hands[nextPlayer]);
-			}
+			}*/
+			selected = players.get(nextPlayer).playOneCard(roundInfo);
 
 
 
@@ -360,7 +366,7 @@ public class Oh_Heaven extends CardGame {
 				selected = null;
 				// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
 				// if (false) {
-				if (0 == nextPlayer) {
+				/*if (0 == nextPlayer) {
 					hands[0].setTouchEnabled(true);
 					setStatus("Player 0 double-click on card to follow.");
 					while (null == selected)
@@ -369,7 +375,8 @@ public class Oh_Heaven extends CardGame {
 					setStatusText("Player " + nextPlayer + " thinking...");
 					delay(thinkingTime);
 					selected = randomCard(hands[nextPlayer]);
-				}
+				}*/
+				selected = players.get(nextPlayer).playOneCard(roundInfo);
 				// Follow with selected card
 				trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards() + 2) * trickWidth));
 				trick.draw();
@@ -396,6 +403,7 @@ public class Oh_Heaven extends CardGame {
 					roundInfo.setCurrentWinningCard(winningCard);
 
 					// TODO 更新 players 的分数
+
 				}
 
 				// End Check
@@ -431,7 +439,29 @@ public class Oh_Heaven extends CardGame {
 	/**** End of One Round of the game ****/
 	/*
 	 * ==============================================================================================================*/
-	 
+
+
+	private void initialisePlayers() {
+		for (int i=0;i<nbPlayers;i++) {
+			String currentPlayerType = playerType.get(i);
+			System.out.println(currentPlayerType);
+			if (currentPlayerType.equals("random")) {
+				players.add(new NonHumanPlayer(i, StrategyType.random));
+			}
+			else if (currentPlayerType.equals("human")) {
+				players.add(new HumanPlayer(i));
+			}
+			else if (currentPlayerType.equals("legal")) {
+				players.add(new NonHumanPlayer(i,StrategyType.legal));
+			}
+			else if (currentPlayerType.equals("smart")) {
+				players.add(new NonHumanPlayer(i,StrategyType.smart));
+			}
+			String text = "[" + String.valueOf(scores[i]) + "]" + String.valueOf(tricks[i]) + "/" + String.valueOf(bids[i]);
+			scoreActors[i] = new TextActor(text, Color.WHITE, bgColor, bigFont);
+			addActor(scoreActors[i], scoreLocations[i]);
+		}
+	}
 
 	/**** Running Process of the Game Program *****/
 	public Oh_Heaven(Properties gameProperies) {
@@ -441,11 +471,11 @@ public class Oh_Heaven extends CardGame {
 
 		// 初始化对应的游戏的数据
 		initialiseProperties(gameProperies);
-
+		initialisePlayers();
 
 		// 两种functions 的不同是一个用于显示， 一个是用于记录
 		initScores();
-		initScoreForGraphicalPurpose();
+		//initScoreForGraphicalPurpose();
 
 		// 开始进行每一轮的记录
 		for (int i = 0; i < nbRounds; i++) {

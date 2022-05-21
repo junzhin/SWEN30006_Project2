@@ -21,21 +21,21 @@ public class RoundInfo {
         this.currentTrump = Trump;
         this.cardsPlayed = new HashMap<>();
         this.ScoresForPlayers = new ArrayList<>();
-}
+    }
  
 
-// Getters and Setters
-public void cardPlayed(int player, Card playedCard){
+    // Getters and Setters
+    public void cardPlayed(int player, Card playedCard){
 
-    if (cardsPlayed.containsKey(player)) {
-        cardsPlayed.get(player).add(playedCard);
-    } else {
-        HashSet<Card> cards = new HashSet<>();
-        cards.add(playedCard);
-        cardsPlayed.put(player, cards);
+        if (cardsPlayed.containsKey(player)) {
+            cardsPlayed.get(player).add(playedCard);
+        } else {
+            HashSet<Card> cards = new HashSet<>();
+            cards.add(playedCard);
+            cardsPlayed.put(player, cards);
+        }
+
     }
-
-}
 
 
     public Suit getCurrentTrump() {

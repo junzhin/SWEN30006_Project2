@@ -23,7 +23,7 @@ public abstract class Player {
     }
 
     // Abstract Signatures
-    public abstract Card playCard(RoundInfo roundInfo);
+    public abstract Card playOneCard(RoundInfo roundInfo);
 
 
 

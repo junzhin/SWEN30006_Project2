@@ -4,6 +4,7 @@ package oh_heaven.game;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class PropertiesLoader {
@@ -40,6 +41,15 @@ public class PropertiesLoader {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public static ArrayList<String> loadPlayerTypes(Properties properties) {
+        ArrayList<String> playerTypes = new ArrayList<>();
+        for (int i=0;i<4;i++) {
+            String propertyPlayerType = properties.getProperty("players."+i);
+            playerTypes.add(propertyPlayerType);
+        }
+        return playerTypes;
     }
 
 

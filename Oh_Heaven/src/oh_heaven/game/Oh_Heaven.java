@@ -236,15 +236,18 @@ public class Oh_Heaven extends CardGame {
 			players.get(i).setHand(hands[i]);
 		}
 		dealingOut(hands, nbPlayers, nbStartCards);
+		System.out.println("after dealing out");
 		for (int i = 0; i < nbPlayers; i++) {
 			hands[i].sort(Hand.SortType.SUITPRIORITY, true);
 		}
+
 		/*check if player is a humna player, then set card listener*/
 		for (Player player: players) {
 			if (player instanceof HumanPlayer) {
 				((HumanPlayer)player).initialiseCardListener();
 			}
 		}
+		System.out.println("after hand sorting");
 		// graphics
 		RowLayout[] layouts = new RowLayout[nbPlayers];
 		for (int i = 0; i < nbPlayers; i++) {
@@ -254,6 +257,7 @@ public class Oh_Heaven extends CardGame {
 			hands[i].setView(this, layouts[i]);
 			hands[i].setTargetArea(new TargetArea(trickLocation));
 			hands[i].draw();
+			System.out.println("graphics index is:"+i);
 		}
 		// for (int i = 1; i < nbPlayers; i++) // This code can be used to visually hide
 		// the cards in a hand (make them face down)
@@ -312,7 +316,7 @@ public class Oh_Heaven extends CardGame {
 		RoundInfo roundInfo = new RoundInfo(trumps);
 
 		int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
-
+		System.out.println("next player is: "+nextPlayer);
 		initBids(trumps, nextPlayer);
 		// initScore();
 		for (int i = 0; i < nbPlayers; i++)
@@ -472,16 +476,19 @@ public class Oh_Heaven extends CardGame {
 		// 初始化对应的游戏的数据
 		initialiseProperties(gameProperies);
 		initialisePlayers();
+		System.out.println("between initialise player and init scores");
 
 		// 两种functions 的不同是一个用于显示， 一个是用于记录
 		initScores();
 		//initScoreForGraphicalPurpose();
-
+		System.out.println("after inti scores");
 		// 开始进行每一轮的记录
 		for (int i = 0; i < nbRounds; i++) {
-
+			System.out.println("index is"+i);
 			initTricks();
+			System.out.println("after iniTreick");
 			initRound();
+			System.out.println("after play round");
 			playRound();
 			updateScores();
 		}

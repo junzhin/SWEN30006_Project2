@@ -24,7 +24,7 @@ public class legalStrategy implements AbleToPlayCard {
         else {
 
             ArrayList<Card> leadSuitCard = playerHand.getCardsWithSuit(leadSuit);
-            if (leadSuitCard!=null) {
+            if (leadSuitCard.size()!=0) {
                 legalPlayedCard = Oh_Heaven.randomCard(leadSuitCard);
             }
             else {

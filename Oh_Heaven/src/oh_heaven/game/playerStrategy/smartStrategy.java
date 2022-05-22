@@ -37,12 +37,12 @@ public class smartStrategy implements AbleToPlayCard {
         if (leadSuit == null) {
             // Check if the player has the trump Suit Cards on hands, need to check with the trump suit of current round
             // from the round info clas
-            if (trumpSuitCards != null) {
+            if (trumpSuitCards.size()!=0) {
                 // Sorting the trump suit cards if exist
                 Collections.sort(trumpSuitCards, new Comparator<Card>() {
                     @Override
                     public int compare(Card o1, Card o2) {
-                        return o2.getRankId() - o1.getRankId();
+                        return o1.getRankId() - o2.getRankId();
           
                     }
                 });
@@ -64,11 +64,12 @@ public class smartStrategy implements AbleToPlayCard {
             ArrayList<Card> leadSuitCard = playerHand.getCardsWithSuit(leadSuit);
 
             // if the current player has the cards with the lead suit
-            if (leadSuitCard!=null) {
+            if (leadSuitCard.size()!=0) {
+                System.out.println("lead suit is not null");
                 Collections.sort(leadSuitCard, new Comparator<Card>() {
                     @Override
                     public int compare(Card o1, Card o2) {
-                        return o2.getRankId() - o1.getRankId();
+                        return o1.getRankId() - o2.getRankId();
                     }
                 });
 
@@ -88,7 +89,7 @@ public class smartStrategy implements AbleToPlayCard {
             else {
 
                 // Check if the current player has the trumpsuit cards
-                if (trumpSuitCards!=null) {
+                if (trumpSuitCards.size()!=0) {
                     // Sorting the trump suit cards if exist
                     Collections.sort(trumpSuitCards, new Comparator<Card>() {
                         @Override
@@ -103,13 +104,11 @@ public class smartStrategy implements AbleToPlayCard {
                 else {
                     // Check if the current player does not have the trumpsuit cards
                     player.getHand().sort(Hand.SortType.RANKPRIORITY, false);
-                    Card highestHandCard = player.getHand().getLast();
-                    if (rankGreater(highestHandCard, currentWinningCard)) {
-                        legalPlayedCard = highestHandCard;
-                    }
-                    else {
-                        legalPlayedCard = player.getHand().getFirst();
-                    }
+                    Card lowestHandCard = player.getHand().getFirst();
+
+
+                    legalPlayedCard = lowestHandCard;
+
 
                 }
 

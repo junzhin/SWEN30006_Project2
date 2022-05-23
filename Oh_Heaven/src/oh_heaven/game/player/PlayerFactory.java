@@ -13,17 +13,19 @@ public class PlayerFactory {
         return instance;
     }
 
-    public Player getPlayerFactoryImplementation(String playerType, int playerIndex, Optional<String> StrategyType) {
+    public Player getPlayerFactoryImplementation(String playerType, int playerIndex) {
         Player newPlayer  = null;
-        //  StrategyType.isPresent()
-        String processedStrategyType = StrategyType.isPresent()? StrategyType.get(): null; 
 
     
         if (playerType.equals("human")) {
             newPlayer = new HumanPlayer(playerIndex);
         }
         else if (playerType.equals("legal")) {
-            newPlayer = new NonHumanPlayer(playerIndex,  StrategyType);
+            newPlayer = new NonHumanPlayer(playerIndex, "legal");
+        } else if (playerType.equals("smart")) {
+            newPlayer = new NonHumanPlayer(playerIndex, "smart");
+        } else {
+            newPlayer = new NonHumanPlayer(playerIndex, "legal");
         }
         return newPlayer;
     }

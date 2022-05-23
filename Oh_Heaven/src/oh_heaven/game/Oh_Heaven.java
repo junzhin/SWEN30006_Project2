@@ -8,7 +8,6 @@ import oh_heaven.game.player.HumanPlayer;
 import oh_heaven.game.player.NonHumanPlayer;
 import oh_heaven.game.player.Player;
 import oh_heaven.game.player.PlayerFactory;
-import oh_heaven.game.playerStrategy.StrategyType;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -172,13 +171,10 @@ public class Oh_Heaven extends CardGame {
 
 	private void initialiseProperties(Properties properties) {
 
-		// Load the relevant parameters from the peroperties files before starting the
-		// game
+		// Load the relevant parameters from the peroperties files before starting the game
 		this.nbStartCards = properties.getProperty("nbStartCards") == null ? this.nbStartCards
 				: Integer.parseInt(properties.getProperty("nbStartCards"));
 
-		// ToDo: other parameters to load from the properties file (Similar to the above
-		// situation)
 
 		this.enforceRules = properties.getProperty("enforceRules") == null ? this.enforceRules
 				: Boolean.parseBoolean(properties.getProperty("enforceRules"));
@@ -191,6 +187,7 @@ public class Oh_Heaven extends CardGame {
 		random = new Random(seed);
 		
 		playerType.addAll(PropertiesLoader.loadPlayerTypes(properties));
+
 
 	}
 
@@ -412,7 +409,7 @@ public class Oh_Heaven extends CardGame {
 	private void initialisePlayers() {
 		for (int i=0;i<nbPlayers;i++) {
 			String currentPlayerType = playerType.get(i);
-			players.add(PlayerFactory.getInstance().getPlayerFactoryImplementation(currentPlayerType, i, StrategyType))
+			players.add(PlayerFactory.getInstance().getPlayerFactoryImplementation(currentPlayerType, i));
 
 			// Include the functionality of updating the initScoreForGraphicalPurpose() 
 			String text = "[" + String.valueOf(scores[i]) + "]" + String.valueOf(tricks[i]) + "/" + String.valueOf(bids[i]);
@@ -444,7 +441,6 @@ public class Oh_Heaven extends CardGame {
 			initRound();
 			playRound(roundInfo);
 			updateScores(roundInfo);
-			roundInfo.ResetCardPlayed();
 		}
 
 		for (int i = 0; i < nbPlayers; i++)

@@ -1,11 +1,9 @@
 package oh_heaven.game.playerStrategy;
-java.lan.St
 
 
 public class strategyFactory {
 
     private static strategyFactory instance = null;
-    private AbleToPlayCard newStrategy = null;
     
     public static synchronized strategyFactory getInstance(){
         if (instance == null){

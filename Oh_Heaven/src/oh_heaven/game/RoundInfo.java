@@ -1,6 +1,4 @@
 package oh_heaven.game;
-import java.util.HashMap;
-import java.util.HashSet;
 import ch.aplu.jcardgame.Card;
 import oh_heaven.game.Oh_Heaven.Suit;
 
@@ -8,7 +6,7 @@ public class RoundInfo {
     private Suit currentTrump = null;
     private int currentWinner;
     private Card currentWinningCard;
-    private Suit lead;
+    private Suit leadSuit;
 
     private int[] ScoresForPlayers;
 
@@ -57,11 +55,11 @@ public class RoundInfo {
     }
 
     public Suit getLead() {
-        return this.lead;
+        return this.leadSuit;
     }
 
     public void setLead(Suit lead) {
-        this.lead = lead;
+        this.leadSuit = lead;
     }
 
     public RoundInfo lead(Suit lead) {

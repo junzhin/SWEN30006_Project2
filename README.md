@@ -49,7 +49,7 @@ The Oh Heaven game play is briefly described below.
 4. At the end of all rounds, the player (or players) with the highest score wins.
 ---
 
-## Program Improvements And Extensions To The Original Verssion:
+## Program Improvements And Extensions To The Original Version:
 ### Additional Npc Types
 - Smart Player
 

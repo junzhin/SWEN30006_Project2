@@ -2,14 +2,13 @@ package oh_heaven.game.player;
 import ch.aplu.jcardgame.Card;
 import oh_heaven.game.RoundInfo;
 import oh_heaven.game.playerStrategy.AbleToPlayCard;
-import oh_heaven.game.playerStrategy.StrategyType;
 import oh_heaven.game.playerStrategy.strategyFactory;
 
 public class NonHumanPlayer extends Player{
 
     protected final AbleToPlayCard PLAYERSTRATEGY;
 
-    public NonHumanPlayer(int playerIndex,  StrategyType npcStrategy) {
+    public NonHumanPlayer(int playerIndex,  String npcStrategy) {
         super(playerIndex);
 
         // Factory Pattern to create corrseponding strategy

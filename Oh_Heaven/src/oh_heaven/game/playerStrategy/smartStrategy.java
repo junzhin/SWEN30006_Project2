@@ -26,7 +26,7 @@ public class smartStrategy implements AbleToPlayCard {
 
 
 
-        player.getHand().sort(Hand.SortType.RANKPRIORITY, false);
+        //player.getHand().sort(Hand.SortType.RANKPRIORITY, false);
 
 
 
@@ -36,27 +36,8 @@ public class smartStrategy implements AbleToPlayCard {
         // Check if the current player is the first players to play a card in a round
         if (leadSuit == null) {
             // Check if the player has the trump Suit Cards on hands, need to check with the trump suit of current round
-            // from the round info clas
-            if (trumpSuitCards.size()!=0) {
-                // Sorting the trump suit cards if exist
-                Collections.sort(trumpSuitCards, new Comparator<Card>() {
-                    @Override
-                    public int compare(Card o1, Card o2) {
-                        return o1.getRankId() - o2.getRankId();
-          
-                    }
-                });
-
-                // Card debug mode to check if the ordering exists
-                for (Card eachCard : trumpSuitCards) {
-                    System.out.println(eachCard.toString());
-                }
-
-                legalPlayedCard = trumpSuitCards.get(0);
-            } else {
-                player.getHand().sort(Hand.SortType.RANKPRIORITY, false);
-                legalPlayedCard = player.getHand().getLast();
-            }
+            // from the round info  clas
+            legalPlayedCard = getCardFromTrumpSuitList(trumpSuitCards,player,"high");
         } // If the current player is not the first player,
         else {
             // Obtain the relevant statistic from roundInfo
@@ -65,13 +46,7 @@ public class smartStrategy implements AbleToPlayCard {
 
             // if the current player has the cards with the lead suit
             if (leadSuitCard.size()!=0) {
-                System.out.println("lead suit is not null");
-                Collections.sort(leadSuitCard, new Comparator<Card>() {
-                    @Override
-                    public int compare(Card o1, Card o2) {
-                        return o1.getRankId() - o2.getRankId();
-                    }
-                });
+                rankCards(leadSuitCard);
 
                 
                 Card biggestCard = leadSuitCard.get(0);
@@ -89,28 +64,7 @@ public class smartStrategy implements AbleToPlayCard {
             else {
 
                 // Check if the current player has the trumpsuit cards
-                if (trumpSuitCards.size()!=0) {
-                    // Sorting the trump suit cards if exist
-                    Collections.sort(trumpSuitCards, new Comparator<Card>() {
-                        @Override
-                        public int compare(Card o1, Card o2) {
-                            return o1.getRankId() - o2.getRankId();
-                        }
-                    });
-
-                    // Just get the fist card from trumpSuit cards
-                    legalPlayedCard = trumpSuitCards.get(0);
-                }
-                else {
-                    // Check if the current player does not have the trumpsuit cards
-                    player.getHand().sort(Hand.SortType.RANKPRIORITY, false);
-                    Card lowestHandCard = player.getHand().getFirst();
-
-
-                    legalPlayedCard = lowestHandCard;
-
-
-                }
+                legalPlayedCard = getCardFromTrumpSuitList(trumpSuitCards, player, "low");
 
 
             }
@@ -125,5 +79,45 @@ public class smartStrategy implements AbleToPlayCard {
 	public boolean rankGreater(Card card1, Card card2) {
 		return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
 	}
+
+    public void rankCards(ArrayList<Card> cards) {
+        Collections.sort(cards, new Comparator<Card>() {
+            @Override
+            public int compare(Card o1, Card o2) {
+                return o1.getRankId() - o2.getRankId();
+            }
+        });
+
+    }
+
+    public Card getCardFromTrumpSuitList(ArrayList<Card> trumpSuitCards,Player player, String neededCard) {
+        if (trumpSuitCards.size()!=0) {
+            // Sorting the trump suit cards if exist
+            rankCards(trumpSuitCards);
+
+
+            return trumpSuitCards.get(0);
+        } else {
+            player.getHand().sort(Hand.SortType.RANKPRIORITY, false);
+            System.out.println(
+                "+++Start++++++++++++++++++++++++++"
+            );
+            for (Card eachCard: player.getHand().getCardList()){
+                System.out.println(eachCard.toString());
+            }
+            System.out.println(
+                    "+-End++++++++++++++++++++++++++++"
+            );
+            if (neededCard.equals("high")) {
+                System.out.println("give the highest card");
+                return player.getHand().getFirst();
+            }
+            else if (neededCard.equals("low")) {
+                System.out.println("enter the low if, get the lowesr card");
+                return player.getHand().getLast();
+            }
+        }
+        return null;
+    }
     
 }

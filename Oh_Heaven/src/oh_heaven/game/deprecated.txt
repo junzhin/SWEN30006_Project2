@@ -1,0 +1,112 @@
+// 当前回合的Lead
+		for (int i = 0; i < nbStartCards; i++) {
+			trick = new Hand(deck);
+			selected = null;
+			// if (false) {
+			// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
+			/*if (0 == nextPlayer) { // Select lead depending on player type
+				hands[0].setTouchEnabled(true);
+				setStatus("Player 0 double-click on card to lead.");
+				while (null == selected)
+					delay(100);
+			} else {
+				setStatusText("Player " + nextPlayer + " thinking...");
+				delay(thinkingTime);
+				selected = randomCard(hands[nextPlayer]);
+			}*/
+			selected = players.get(nextPlayer).playOneCard(roundInfo);
+
+
+
+			// Lead with selected card
+			trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards() + 2) * trickWidth));
+			trick.draw();
+			selected.setVerso(false);
+
+			// No restrictions on the card being lead
+			lead = (Suit) selected.getSuit();
+			selected.transfer(trick, true); // transfer to trick (includes graphic effect)
+			winner = nextPlayer;
+			winningCard = selected;
+
+			// End Lead
+
+			// 更新数据到round info， 首玩家
+			roundInfo.cardPlayed(nextPlayer, selected);
+			roundInfo.setLead(lead);
+			roundInfo.setCurrentWinner(winner);
+			roundInfo.setCurrentWinningCard(winningCard);
+
+
+			// 其他players的出牌逻辑
+			for (int j = 1; j < nbPlayers; j++) {
+				if (++nextPlayer >= nbPlayers)
+					nextPlayer = 0; // From last back to first
+				selected = null;
+				// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
+				// if (false) {
+				/*if (0 == nextPlayer) {
+					hands[0].setTouchEnabled(true);
+					setStatus("Player 0 double-click on card to follow.");
+					while (null == selected)
+						delay(100);
+				} else {
+					setStatusText("Player " + nextPlayer + " thinking...");
+					delay(thinkingTime);
+					selected = randomCard(hands[nextPlayer]);
+				}*/
+				selected = players.get(nextPlayer).playOneCard(roundInfo);
+				// Follow with selected card
+				trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards() + 2) * trickWidth));
+				trick.draw();
+				selected.setVerso(false); // In case it is upside down
+				// Check: Following card must follow suit if possible
+				// 这里应该是有关游戏规则的检查的设置， 看花色是否等于lead 的花色， 如果不是检查玩家手牌中有没有与lead 花色一致的手牌， 没有则违反规则
+				if (selected.getSuit() != lead && hands[nextPlayer].getNumberOfCardsWithSuit(lead) > 0) {
+					// Rule violation
+					String violation = "Follow rule broken by player " + nextPlayer + " attempting to play " + selected;
+					System.out.println(violation);
+					if (enforceRules)
+						try {
+							throw (new BrokeRuleException(violation));
+						} catch (BrokeRuleException e) {
+							e.printStackTrace();
+							System.out.println("A cheating player spoiled the game!");
+							System.exit(0);
+						}
+
+				}
+
+				// End Check
+				selected.transfer(trick, true); // transfer to trick (includes graphic effect)
+				System.out.println("winning: " + winningCard);
+				System.out.println(" played: " + selected);
+				// System.out.println("winning: suit = " + winningCard.getSuit() + ", rank = " +
+				// (13 - winningCard.getRankId()));
+				// System.out.println(" played: suit = " + selected.getSuit() + ", rank = " +
+				// (13 - selected.getRankId()));
+				if ( // beat current winner with higher card
+				(selected.getSuit() == winningCard.getSuit() && rankGreater(selected, winningCard)) ||
+				// trumped when non-trump was winning
+						(selected.getSuit() == trumps && winningCard.getSuit() != trumps)) {
+					System.out.println("NEW WINNER");
+					winner = nextPlayer;
+					winningCard = selected;
+				}
+				// 更新数据到round info 每一个玩家
+				roundInfo.cardPlayed(nextPlayer, selected);
+				roundInfo.setLead(lead);
+				roundInfo.setCurrentWinner(winner);
+				roundInfo.setCurrentWinningCard(winningCard);
+
+				// End Follow
+			}
+
+			delay(600);
+			trick.setView(this, new RowLayout(hideLocation, 0));
+			trick.draw();
+			nextPlayer = winner;
+			setStatusText("Player " + nextPlayer + " wins trick.");
+			tricks[nextPlayer]++;
+			updateScoreGraphics(nextPlayer);
+		}

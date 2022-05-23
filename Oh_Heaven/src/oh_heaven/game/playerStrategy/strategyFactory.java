@@ -1,4 +1,5 @@
 package oh_heaven.game.playerStrategy;
+java.lan.St
 
 
 public class strategyFactory {
@@ -13,15 +14,19 @@ public class strategyFactory {
         return instance;
     }
 
-    public AbleToPlayCard getStrategyImplementation(StrategyType strategyType) {
-        switch (strategyType) {
-            case smart:
+    public AbleToPlayCard getStrategyImplementation(String strategyType) {
+
+        AbleToPlayCard newStrategy = null;
+        String processString = strategyType.toLowerCase();
+        
+        switch (processString) {
+            case "smart":
                 newStrategy = new smartStrategy();
                 break;
-            case random:
+            case "random":
                 newStrategy = new randomStrategy();
                 break;
-            case legal:
+            case "legal":
                 newStrategy = new legalStrategy();
                 break;
             default:

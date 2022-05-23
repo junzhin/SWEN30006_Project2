@@ -1,8 +1,6 @@
 package oh_heaven.game;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
 import ch.aplu.jcardgame.Card;
 import oh_heaven.game.Oh_Heaven.Suit;
 
@@ -12,31 +10,12 @@ public class RoundInfo {
     private Card currentWinningCard;
     private Suit lead;
 
-    private HashMap<Integer, HashSet<Card>> cardsPlayed;
-
     private int[] ScoresForPlayers;
 
     public RoundInfo() {
         // this.currentTrump = Trump;
-        this.cardsPlayed = new HashMap<>();
         this.ScoresForPlayers = null; 
     }
- 
-
-    // Getters and Setters
-    public void cardPlayed(int player, Card playedCard){
-
-        if (cardsPlayed.containsKey(player)) {
-            cardsPlayed.get(player).add(playedCard);
-        } else {
-            HashSet<Card> cards = new HashSet<>();
-            cards.add(playedCard);
-            cardsPlayed.put(player, cards);
-        }
-
-    }
-
-
 
     public Suit getCurrentTrump() {
         return this.currentTrump;
@@ -90,19 +69,6 @@ public class RoundInfo {
         return this;
     }
 
-    public HashMap<Integer,HashSet<Card>> getCardsPlayed() {
-        return this.cardsPlayed;
-    }
-
-    public void setCardsPlayed(HashMap<Integer,HashSet<Card>> cardsPlayed) {
-        this.cardsPlayed = cardsPlayed;
-    }
-
-    public RoundInfo cardsPlayed(HashMap<Integer,HashSet<Card>> cardsPlayed) {
-        setCardsPlayed(cardsPlayed);
-        return this;
-    }
-
     public int[] getScoresForPlayers() {
         return this.ScoresForPlayers;
     }
@@ -115,6 +81,10 @@ public class RoundInfo {
         setScoresForPlayers(ScoresForPlayers);
         return this;
     }
+    
+    
+
+    
 
 
     @Override

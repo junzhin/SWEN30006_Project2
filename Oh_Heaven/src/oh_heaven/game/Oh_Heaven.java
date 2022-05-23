@@ -7,11 +7,11 @@ import ch.aplu.jgamegrid.*;
 import oh_heaven.game.player.HumanPlayer;
 import oh_heaven.game.player.NonHumanPlayer;
 import oh_heaven.game.player.Player;
+import oh_heaven.game.player.PlayerFactory;
 import oh_heaven.game.playerStrategy.StrategyType;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.nio.file.SecureDirectoryStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -168,16 +168,6 @@ public class Oh_Heaven extends CardGame {
 			tricks[i] = 0;
 		}
 	}
-	
-	private void initScoreForGraphicalPurpose() {
-		for (int i = 0; i < nbPlayers; i++) {
-			// scores[i] = 0;
-			String text = "[" + String.valueOf(scores[i]) + "]" + String.valueOf(tricks[i]) + "/"
-					+ String.valueOf(bids[i]);
-			scoreActors[i] = new TextActor(text, Color.WHITE, bgColor, bigFont);
-			addActor(scoreActors[i], scoreLocations[i]);
-		}
-	}
 
 
 	private void initialiseProperties(Properties properties) {
@@ -205,7 +195,7 @@ public class Oh_Heaven extends CardGame {
 	}
 
 	/**
-	 * 初始化 bids 值
+	 * Initialize the bids value for each player in the game
 	 * 
 	 * @param trumps
 	 * @param nextPlayer
@@ -312,8 +302,8 @@ public class Oh_Heaven extends CardGame {
 		addActor(trumpsActor, trumpsActorLocation);//图像交互相关
 		// End trump suit
 		
-		Hand trick; // 这一回合出过的牌
-		int winner;// 这一回合的赢家
+		Hand trick; // cards played before for one round
+		int winner;// currentWinner for a SubRound 
 		Card winningCard;// 决胜的牌
 		Suit lead;// 这一回合第一个人错的
 
@@ -328,93 +318,65 @@ public class Oh_Heaven extends CardGame {
 			updateScoreGraphics(i);
 
 	
-		// 当前回合的Lead
+		// One  Round contains 13 sub-round, which is the number of the start cards
 		for (int i = 0; i < nbStartCards; i++) {
+
+			// Initialize the variables ready for one sub-round
 			trick = new Hand(deck);
 			selected = null;
-			// if (false) {
-			// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
-			/*if (0 == nextPlayer) { // Select lead depending on player type
-				hands[0].setTouchEnabled(true);
-				setStatus("Player 0 double-click on card to lead.");
-				while (null == selected)
-					delay(100);
-			} else {
-				setStatusText("Player " + nextPlayer + " thinking...");
-				delay(thinkingTime);
-				selected = randomCard(hands[nextPlayer]);
-			}*/
-			selected = players.get(nextPlayer).playOneCard(roundInfo);
+			lead = null;
+			roundInfo.setLead(null);
+			winner = 0;
+			winningCard = null;
 
 
+			// One complete sub-round
+			for (int j = 0; j < nbPlayers; j++){
 
-			// Lead with selected card
-			trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards() + 2) * trickWidth));
-			trick.draw();
-			selected.setVerso(false);
-
-			// No restrictions on the card being lead
-			lead = (Suit) selected.getSuit();
-			selected.transfer(trick, true); // transfer to trick (includes graphic effect)
-			winner = nextPlayer;
-			winningCard = selected;
-
-			// End Lead
-
-			// 更新数据到round info， 首玩家
-			roundInfo.cardPlayed(nextPlayer, selected);
-			roundInfo.setLead(lead);
-			roundInfo.setCurrentWinner(winner);
-			roundInfo.setCurrentWinningCard(winningCard);
-
-
-			// 其他players的出牌逻辑
-			for (int j = 1; j < nbPlayers; j++) {
-				if (++nextPlayer >= nbPlayers)
+				// if it is not lead of a sub-round
+				if (lead != null && ++nextPlayer >= nbPlayers){
 					nextPlayer = 0; // From last back to first
-				selected = null;
-				// 用于原始版本的出牌决策， 后期需要换掉 当前回合的lead
-				// if (false) {
-				/*if (0 == nextPlayer) {
-					hands[0].setTouchEnabled(true);
-					setStatus("Player 0 double-click on card to follow.");
-					while (null == selected)
-						delay(100);
-				} else {
-					setStatusText("Player " + nextPlayer + " thinking...");
-					delay(thinkingTime);
-					selected = randomCard(hands[nextPlayer]);
-				}*/
+				}
+				
 				selected = players.get(nextPlayer).playOneCard(roundInfo);
+
+				
 				// Follow with selected card
 				trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards() + 2) * trickWidth));
 				trick.draw();
 				selected.setVerso(false); // In case it is upside down
-				// Check: Following card must follow suit if possible
-				// 这里应该是有关游戏规则的检查的设置， 看花色是否等于lead 的花色， 如果不是检查玩家手牌中有没有与lead 花色一致的手牌， 没有则违反规则
-				if (selected.getSuit() != lead && hands[nextPlayer].getNumberOfCardsWithSuit(lead) > 0) {
-					// Rule violation
-					String violation = "Follow rule broken by player " + nextPlayer + " attempting to play " + selected;
-					System.out.println(violation);
-					if (enforceRules)
-						try {
-							throw (new BrokeRuleException(violation));
-						} catch (BrokeRuleException e) {
-							e.printStackTrace();
-							System.out.println("A cheating player spoiled the game!");
-							System.exit(0);
-						}
 
+				// if the current turn is the lead of the current subround
+				if (lead == null){
+					// No restrictions on the card being lead
+					lead = (Suit) selected.getSuit();
+					winner = nextPlayer;
+					winningCard = selected;
+				} else {
+					// Check: Following card must follow suit if possible, whic is the 
+					// game rule violation checking
+					if (selected.getSuit() != lead && hands[nextPlayer].getNumberOfCardsWithSuit(lead) > 0) {
+						// Rule violation
+						String violation = "Follow rule broken by player " + nextPlayer + " attempting to play " + selected;
+					System.out.println(violation);
+						if (enforceRules)
+							try {
+								throw (new BrokeRuleException(violation));
+							} catch (BrokeRuleException e) {
+								e.printStackTrace();
+								System.out.println("A cheating player spoiled the game!");
+								System.exit(0);
+							}
+						
+					}
 				}
 
-				// End Check
+								
 				selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 				System.out.println("winning: " + winningCard);
 				System.out.println(" played: " + selected);
-				// System.out.println("winning: suit = " + winningCard.getSuit() + ", rank = " +
-				// (13 - winningCard.getRankId()));
-				// System.out.println(" played: suit = " + selected.getSuit() + ", rank = " +
-				// (13 - selected.getRankId()));
+
+				// Update the winner and the corrsesponding winning card
 				if ( // beat current winner with higher card
 				(selected.getSuit() == winningCard.getSuit() && rankGreater(selected, winningCard)) ||
 				// trumped when non-trump was winning
@@ -423,19 +385,18 @@ public class Oh_Heaven extends CardGame {
 					winner = nextPlayer;
 					winningCard = selected;
 				}
+
 				// 更新数据到round info 每一个玩家
-				roundInfo.cardPlayed(nextPlayer, selected);
 				roundInfo.setLead(lead);
 				roundInfo.setCurrentWinner(winner);
 				roundInfo.setCurrentWinningCard(winningCard);
-
-				// End Follow
 			}
 
 			delay(600);
 			trick.setView(this, new RowLayout(hideLocation, 0));
 			trick.draw();
 			nextPlayer = winner;
+			
 			setStatusText("Player " + nextPlayer + " wins trick.");
 			tricks[nextPlayer]++;
 			updateScoreGraphics(nextPlayer);
@@ -451,19 +412,9 @@ public class Oh_Heaven extends CardGame {
 	private void initialisePlayers() {
 		for (int i=0;i<nbPlayers;i++) {
 			String currentPlayerType = playerType.get(i);
-			System.out.println(currentPlayerType);
-			if (currentPlayerType.equals("random")) {
-				players.add(new NonHumanPlayer(i, StrategyType.random));
-			}
-			else if (currentPlayerType.equals("human")) {
-				players.add(new HumanPlayer(i));
-			}
-			else if (currentPlayerType.equals("legal")) {
-				players.add(new NonHumanPlayer(i,StrategyType.legal));
-			}
-			else if (currentPlayerType.equals("smart")) {
-				players.add(new NonHumanPlayer(i,StrategyType.smart));
-			}
+			players.add(PlayerFactory.getInstance().getPlayerFactoryImplementation(currentPlayerType, i, StrategyType))
+
+			// Include the functionality of updating the initScoreForGraphicalPurpose() 
 			String text = "[" + String.valueOf(scores[i]) + "]" + String.valueOf(tricks[i]) + "/" + String.valueOf(bids[i]);
 			scoreActors[i] = new TextActor(text, Color.WHITE, bgColor, bigFont);
 			addActor(scoreActors[i], scoreLocations[i]);
@@ -493,6 +444,7 @@ public class Oh_Heaven extends CardGame {
 			initRound();
 			playRound(roundInfo);
 			updateScores(roundInfo);
+			roundInfo.ResetCardPlayed();
 		}
 
 		for (int i = 0; i < nbPlayers; i++)

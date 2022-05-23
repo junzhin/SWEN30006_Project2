@@ -20,38 +20,39 @@ public class Oh_Heaven extends CardGame {
 	/*=============================================================================================================== */
 
 	/*******Defintions of Graphical Settings, Constants and Variables ********/
-	// 定义受手牌的花色
+	// Defintion of Suit
 	public enum Suit {
 		SPADES, HEARTS, DIAMONDS, CLUBS
 	}
 
-	// 定义rank
+	// Defintion of Rank
 	public enum Rank {
 		// Reverse order of rank importance (see rankGreater() below)
 		// Order of cards is tied to card images
 		ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
 	}
 
-	// 图像对应的花色， 用于游戏graphical purposes
+	// Defintions of graphical setting
 	final String trumpImage[] = { "bigspade.gif", "bigheart.gif", "bigdiamond.gif", "bigclub.gif" };
 
 	private final String version = "1.0";
-	// 玩家数量
+	// number of players (default: 4)
 	public final int nbPlayers = 4;
-	// 每个玩家的数量
+	// number of cards for each round
 	public int nbStartCards = 13;
-	// 每局游戏的轮数
+	// number of round for each game
 	public int nbRounds = 3;
-	// 当赢得回合数量与预测胜利回合数量相等的时候的格外奖励
+	// Additional Bonus Score 
 	public final int madeBidBonus = 10;
 
+	// Storing player types and player
 	private ArrayList<String> playerType = new ArrayList<>();
 	private ArrayList<Player> players = new ArrayList<>();
 
-	// 随机seeds 设置
+	// Dafault Random seet
 	public static int seed = 30006;
 
-	// 图像的设置
+	// Graphical setting
 	private final int handWidth = 400;
 	private final int trickWidth = 40;
 	private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
@@ -68,27 +69,27 @@ public class Oh_Heaven extends CardGame {
 			// new Location(650, 575)
 			new Location(575, 575)
 	};
-	// 记录游戏交互界面玩家的当前的分数的信息
+	//General Game Graphical Interface setting
 	private Actor[] scoreActors = { null, null, null, null };
 	private final Location trickLocation = new Location(350, 350);
 	private final Location textLocation = new Location(350, 450);
-	private final int thinkingTime = 2000;
+	private  int thinkingTime = 2000;
 	private Hand[] hands;
 	private Location hideLocation = new Location(-500, -500);
 	private Location trumpsActorLocation = new Location(50, 50);
 
-	// 是否设置游戏需要施加游戏规则， *不确定(需要configure)
+	// Default boolean variable for enforceRule setting
 	private boolean enforceRules = false;
 
 	public void setStatus(String string) {
 		setStatusText(string);
 	}
 
-	// 记录玩家的分数
+	// Player scores' array
 	private int[] scores = new int[nbPlayers];
-	// 当前一场比赛中 的已经赢得回合的数量
+	// Current Wining statistic for each player in one round
 	private int[] tricks = new int[nbPlayers];
-	// 在一场比赛中， 预测的能够赢回合的总次数 （一共三个回合）
+	// Prediction of the number of wining time for one game
 	private int[] bids = new int[nbPlayers];
 
 	Font bigFont = new Font("Serif", Font.BOLD, 36);
@@ -102,7 +103,7 @@ public class Oh_Heaven extends CardGame {
 
 	/******************Helper Functions**************/
 
-	// 回合开始的时候随机发牌
+	// Distribute the cards at the start of each subround
 	private void dealingOut(Hand[] hands, int nbPlayers, int nbCardsPerPlayer) {
 		Hand pack = deck.toHand(false);
 		// pack.setView(Oh_Heaven.this, new RowLayout(hideLocation, 0));
@@ -119,7 +120,7 @@ public class Oh_Heaven extends CardGame {
 		}
 	}
 
-	// 用于比较两张手牌的大小
+	// Comparing the cards' rank
 	public boolean rankGreater(Card card1, Card card2) {
 		return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
 	}
@@ -151,7 +152,7 @@ public class Oh_Heaven extends CardGame {
 
 	/****************** Initialization and Updating **************/
 	/***
-	 * 复原用于记录的scores 的 array
+	 * Reset the scores of each player
 	 */
 	private void initScores() {
 		for (int i = 0; i < nbPlayers; i++) {
@@ -160,7 +161,7 @@ public class Oh_Heaven extends CardGame {
 	}
 
 	/**
-	 * 重置记录赢得比赛次数的array， 每一回合重置一次
+	 * Reset the winning time for each players
 	 */
 	private void initTricks() {
 		for (int i = 0; i < nbPlayers; i++) {
@@ -168,31 +169,57 @@ public class Oh_Heaven extends CardGame {
 		}
 	}
 
+	/**
+	 * Include the functionality of updating the initScoreForGraphicalPurpose()
+	 */
+	private void initinitScoreForGraphicalPurpose() {
+		
+		for (int i = 0; i < nbPlayers; i++) {
+			// scores[i] = 0;
+			String text = "[" + String.valueOf(scores[i]) + "]" + String.valueOf(tricks[i]) + "/"
+					+ String.valueOf(bids[i]);
+			scoreActors[i] = new TextActor(text, Color.WHITE, bgColor, bigFont);
+			addActor(scoreActors[i], scoreLocations[i]);
+		}
+	}
 
 	private void initialiseProperties(Properties properties) {
 
-		// Load the relevant parameters from the peroperties files before starting the game
-		this.nbStartCards = properties.getProperty("nbStartCards") == null ? this.nbStartCards
-				: Integer.parseInt(properties.getProperty("nbStartCards"));
+		// Load the relevant parameters from the peroperties files before starting the game;
 
+		String tempStoringVariable = properties.getProperty("enforceRules");
+		if (tempStoringVariable != null) {
+			this.enforceRules = Boolean.parseBoolean(tempStoringVariable);
+		}
 
-		this.enforceRules = properties.getProperty("enforceRules") == null ? this.enforceRules
-				: Boolean.parseBoolean(properties.getProperty("enforceRules"));
+		tempStoringVariable = properties.getProperty("nbStartCards");
+		if (tempStoringVariable != null){
+			this.nbStartCards = Integer.parseInt(tempStoringVariable);
+		}
 
-		this.nbRounds = properties.getProperty("rounds") == null ? this.nbRounds
-			: Integer.parseInt(properties.getProperty("rounds"));
+		tempStoringVariable = properties.getProperty("rounds");
+		if (tempStoringVariable != null) {
+			this.nbRounds = Integer.parseInt(tempStoringVariable);
+		}
 
+		tempStoringVariable = properties.getProperty("seed");
 		// reassign the seed value to random class
-		seed = properties.getProperty("seed") == null ? seed: Integer.parseInt(properties.getProperty("seed"));
-		random = new Random(seed);
-		
+		if (tempStoringVariable != null){
+			seed = Integer.parseInt(tempStoringVariable);
+			random = new Random(seed);
+		}
+
+		tempStoringVariable = properties.getProperty("thinkingTime");
+		// reassign the seed value to random class
+		if (tempStoringVariable != null) {
+			this.thinkingTime = Integer.parseInt(tempStoringVariable);
+		}
+	
 		playerType.addAll(PropertiesLoader.loadPlayerTypes(properties));
-
-
 	}
 
 	/**
-	 * Initialize the bids value for each player in the game
+	 * Initialize the bids value for each player for a game of three rounds
 	 * 
 	 * @param trumps
 	 * @param nextPlayer
@@ -230,6 +257,7 @@ public class Oh_Heaven extends CardGame {
 			hands[i].sort(Hand.SortType.SUITPRIORITY, true);
 		}
 		/*check if player is a humna player, then set card listener*/
+		// 这里要改一下， 注意检查, 查重警告
 		for (Player player: players) {
 			if (player instanceof HumanPlayer) {
 				((HumanPlayer)player).initialiseCardListener();
@@ -240,11 +268,11 @@ public class Oh_Heaven extends CardGame {
 		for (int i = 0; i < nbPlayers; i++) {
 			layouts[i] = new RowLayout(handLocations[i], handWidth);
 			layouts[i].setRotationAngle(90 * i);
-			// layouts[i].setStepDelay(10);
 			hands[i].setView(this, layouts[i]);
 			hands[i].setTargetArea(new TargetArea(trickLocation));
 			hands[i].draw();
 		}
+
 		// for (int i = 1; i < nbPlayers; i++) // This code can be used to visually hide
 		// the cards in a hand (make them face down)
 		// hands[i].setVerso(true); // You do not need to use or change this code.
@@ -254,7 +282,7 @@ public class Oh_Heaven extends CardGame {
 
 
 	/**
-	 * 更新用于graphical rendering 的 Scores 的 Array， ！大概率没有用
+	 * Rendering the graphical display of each players' scores
 	 * @param player
 	 */
 	private void updateScoreGraphics(int player) {
@@ -267,7 +295,7 @@ public class Oh_Heaven extends CardGame {
 
 
 	/**
-	 *  更新玩家对应当前的游戏分数的数组
+	 * Update the scores of each player at the end of one complete round
 	 */
 	private void updateScores(RoundInfo roundinfo) {
 		for (int i = 0; i < nbPlayers; i++) {
@@ -290,19 +318,19 @@ public class Oh_Heaven extends CardGame {
 
 
 		// Select and display trump suit
-		// 随机选择random trump Suit
+		// For the first subround, a lead player is randomly chosen
 		final Suit trumps = randomEnum(Suit.class);
 		final Actor trumpsActor = new Actor("sprites/" + trumpImage[trumps.ordinal()]);
 
 		
 
-		addActor(trumpsActor, trumpsActorLocation);//图像交互相关
+		addActor(trumpsActor, trumpsActorLocation);// Graphical Interface for player and its player location
 		// End trump suit
 		
 		Hand trick; // cards played before for one round
 		int winner;// currentWinner for a SubRound 
-		Card winningCard;// 决胜的牌
-		Suit lead;// 这一回合第一个人错的
+		Card winningCard;// currentWinnning Card for a SubRound
+		Suit lead;// The suit of the leading
 
 		roundInfo.setCurrentTrump(trumps);
 
@@ -334,6 +362,9 @@ public class Oh_Heaven extends CardGame {
 				if (lead != null && ++nextPlayer >= nbPlayers){
 					nextPlayer = 0; // From last back to first
 				}
+
+				setStatusText("Player " + nextPlayer + " thinking...");
+		        delay(thinkingTime);
 				
 				selected = players.get(nextPlayer).playOneCard(roundInfo);
 
@@ -368,7 +399,7 @@ public class Oh_Heaven extends CardGame {
 					}
 				}
 
-								
+				// Transfer of played Cards to trick array
 				selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 				System.out.println("winning: " + winningCard);
 				System.out.println(" played: " + selected);
@@ -383,12 +414,13 @@ public class Oh_Heaven extends CardGame {
 					winningCard = selected;
 				}
 
-				// 更新数据到round info 每一个玩家
+				// Update the round-Info 
 				roundInfo.setLead(lead);
 				roundInfo.setCurrentWinner(winner);
 				roundInfo.setCurrentWinningCard(winningCard);
 			}
 
+			// Graphical and game bebviouring settings
 			delay(600);
 			trick.setView(this, new RowLayout(hideLocation, 0));
 			trick.draw();
@@ -410,12 +442,8 @@ public class Oh_Heaven extends CardGame {
 		for (int i=0;i<nbPlayers;i++) {
 			String currentPlayerType = playerType.get(i);
 			players.add(PlayerFactory.getInstance().getPlayerFactoryImplementation(currentPlayerType, i));
-
-			// Include the functionality of updating the initScoreForGraphicalPurpose() 
-			String text = "[" + String.valueOf(scores[i]) + "]" + String.valueOf(tricks[i]) + "/" + String.valueOf(bids[i]);
-			scoreActors[i] = new TextActor(text, Color.WHITE, bgColor, bigFont);
-			addActor(scoreActors[i], scoreLocations[i]);
 		}
+		
 	}
 
 	/**** Running Process of the Game Program *****/
@@ -424,17 +452,18 @@ public class Oh_Heaven extends CardGame {
 		setTitle("Oh_Heaven (V" + version + ") Constructed for UofM SWEN30006 with JGameGrid (www.aplu.ch)");
 		setStatusText("Initializing...");
 
-		// 初始化对应的游戏的数据
+		// Loading the game settings from the file and initialize the players
 		initialiseProperties(gameProperies);
 		initialisePlayers();
 
-		// 两种functions 的不同是一个用于显示， 一个是用于记录
+		// Initialize the Scores and graphical interface for score displaying
 		initScores();
-		//initScoreForGraphicalPurpose();
+		initinitScoreForGraphicalPurpose();
 
 		// 开始进行每一轮的记录
 		for (int i = 0; i < nbRounds; i++) {
 
+			// Initialize the roundData Recorder 
 			RoundInfo roundInfo = new RoundInfo();
 
 			initTricks();

@@ -13,7 +13,6 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(int playerIndex) {
         super(playerIndex);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -30,6 +29,7 @@ public class HumanPlayer extends Player {
 
     }
 
+    
     public void initialiseCardListener() {
         CardListener cardListener = new CardAdapter()  // Human Player plays card
         {

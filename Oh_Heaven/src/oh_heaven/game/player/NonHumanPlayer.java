@@ -10,14 +10,14 @@ public class NonHumanPlayer extends Player{
 
     public NonHumanPlayer(int playerIndex,  String npcStrategy) {
         super(playerIndex);
-
+        
         // Factory Pattern to create corrseponding strategy
         this.PLAYERSTRATEGY = strategyFactory.getInstance().getStrategyImplementation(npcStrategy);
     }
 
     @Override
     public Card playOneCard(RoundInfo roundInfo) {
-        // TODO Auto-generated method stub
+
         return PLAYERSTRATEGY.generateOneMove(this,roundInfo);
     }
     

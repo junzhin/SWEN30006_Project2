@@ -5,7 +5,6 @@ package oh_heaven.game;
 import ch.aplu.jcardgame.*;
 import ch.aplu.jgamegrid.*;
 import oh_heaven.game.player.HumanPlayer;
-import oh_heaven.game.player.NonHumanPlayer;
 import oh_heaven.game.player.Player;
 import oh_heaven.game.player.PlayerFactory;
 

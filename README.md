@@ -96,4 +96,4 @@ Workshop 14 14:30 - 16:30
 - **If it is your first time to open this project, make sure you open the 
 program folder at the correct directory level.**
 
--  Main function is <u>src/oh_heaven/game/Oh_Heaven.java</u>
+-  Main function is at <u>src/oh_heaven/game/Oh_Heaven.java</u>

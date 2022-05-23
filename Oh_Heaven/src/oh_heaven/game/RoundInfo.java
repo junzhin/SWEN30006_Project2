@@ -84,9 +84,6 @@ public class RoundInfo {
     
     
 
-    
-
-
     @Override
     public String toString() {
         return "{" +
@@ -94,9 +91,9 @@ public class RoundInfo {
             ", currentWinner='" + getCurrentWinner() + "'" +
             ", currentWinningCard='" + getCurrentWinningCard() + "'" +
             ", lead='" + getLead() + "'" +
-            ", cardsPlayed='" + getCardsPlayed() + "'" +
             ", ScoresForPlayers='" + getScoresForPlayers() + "'" +
             "}";
     }
-     
+
+    
 }

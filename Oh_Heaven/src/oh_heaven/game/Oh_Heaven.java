@@ -309,7 +309,7 @@ public class Oh_Heaven extends CardGame {
 	/**
 	 * Update the scores of each player at the end of one complete round
 	 */
-	private void updateScores(RoundInfo roundinfo) {
+	private void updateScores(TrickStatistics roundinfo) {
 		for (int i = 0; i < nbPlayers; i++) {
 			scores[i] += tricks[i];
 			if (tricks[i] == bids[i])
@@ -326,7 +326,7 @@ public class Oh_Heaven extends CardGame {
 
 	/****One Round of the game ****/
 
-	private void playRound(RoundInfo roundInfo) {
+	private void playRound(TrickStatistics roundInfo) {
 
 
 		// Select and display trump suit
@@ -476,7 +476,7 @@ public class Oh_Heaven extends CardGame {
 		for (int i = 0; i < nbRounds; i++) {
 
 			// Initialize the roundData Recorder 
-			RoundInfo roundInfo = new RoundInfo();
+			TrickStatistics roundInfo = new TrickStatistics();
 
 			initTricks();
 			initRound();

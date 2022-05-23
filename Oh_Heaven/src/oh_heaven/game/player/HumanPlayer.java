@@ -1,6 +1,6 @@
 package oh_heaven.game.player;
 import ch.aplu.jcardgame.Card;
-import oh_heaven.game.RoundInfo;
+import oh_heaven.game.TrickStatistics;
 
 import static ch.aplu.jgamegrid.GameGrid.delay;
 
@@ -14,7 +14,7 @@ public class HumanPlayer extends Player {
 
     // Generate one player Card
     @Override
-    public Card playOneCard(RoundInfo roundInfo) {
+    public Card playOneCard(TrickStatistics roundInfo) {
         selectedCard = null;
         hand.setTouchEnabled(true);
         // delay for the selecting card

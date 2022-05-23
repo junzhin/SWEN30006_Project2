@@ -2,7 +2,7 @@ package oh_heaven.game.player;
 
 import ch.aplu.jcardgame.Card;
 import ch.aplu.jcardgame.Hand;
-import oh_heaven.game.RoundInfo;
+import oh_heaven.game.TrickStatistics;
 
 public abstract class Player {
 
@@ -21,7 +21,7 @@ public abstract class Player {
     }
 
     // Abstract method for playing one card to the trick
-    public abstract Card playOneCard(RoundInfo roundInfo);
+    public abstract Card playOneCard(TrickStatistics roundInfo);
 
 
     // Getters and Setters

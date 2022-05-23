@@ -9,31 +9,37 @@ import oh_heaven.game.player.Player;
 import java.util.ArrayList;
 
 public class legalStrategy implements AbleToPlayCard {
-
+    
+    // constructor
     public legalStrategy() {
     }
 
+
+    // Generate one card to play for current subround which is legal to play
     @Override
     public Card generateOneMove(Player player, RoundInfo currentRoundInfo) {
         Card legalPlayedCard = null;
         Oh_Heaven.Suit leadSuit = currentRoundInfo.getLead();
         Hand playerHand = player.getHand();
-        if (leadSuit == null) {
-            legalPlayedCard = Oh_Heaven.randomCard(playerHand);
-        }
-        else {
-
+        if (leadSuit != null) {
             ArrayList<Card> leadSuitCard = playerHand.getCardsWithSuit(leadSuit);
             if (leadSuitCard.size()!=0) {
                 legalPlayedCard = Oh_Heaven.randomCard(leadSuitCard);
             }
             else {
-                legalPlayedCard = Oh_Heaven.randomCard(playerHand);
+                legalPlayedCard = getRandomFromHand(playerHand);
             }
+        }
+        else {
+            legalPlayedCard = getRandomFromHand(playerHand);
+
         }
 
         return legalPlayedCard;
     }
-
+    private Card getRandomFromHand(Hand hand) {
+        Card legalPlayedCard = Oh_Heaven.randomCard(hand);
+        return legalPlayedCard;
+    }
     
 }

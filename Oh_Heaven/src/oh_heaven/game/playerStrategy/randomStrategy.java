@@ -7,10 +7,15 @@ import oh_heaven.game.RoundInfo;
 import oh_heaven.game.player.Player;
 
 public class randomStrategy implements AbleToPlayCard {
-
+    /**
+    Constructor
+     */
     public randomStrategy() {
     }
 
+    /**
+     * Generate one card to play randomly for current subround
+     */
     @Override
     public Card generateOneMove(Player player, RoundInfo currentRoundInfo) {
         Hand hand = player.getHand();

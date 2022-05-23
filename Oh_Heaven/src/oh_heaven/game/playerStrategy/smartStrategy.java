@@ -12,13 +12,18 @@ import java.util.Comparator;
 
 public class smartStrategy implements AbleToPlayCard {
 
+    /**
+    Constructor
+     */
     public smartStrategy() {
     }
 
-
+    /**
+     * Generate one card to play for current subround
+     */
     @Override
     public Card generateOneMove(Player player, RoundInfo currentRoundInfo) {
-        Card legalPlayedCard;
+        Card smartPlayedCard;
         Oh_Heaven.Suit leadSuit = currentRoundInfo.getLead();
         Hand playerHand = player.getHand();
         Oh_Heaven.Suit trumpSuit = currentRoundInfo.getCurrentTrump();
@@ -37,7 +42,7 @@ public class smartStrategy implements AbleToPlayCard {
         if (leadSuit == null) {
             // Check if the player has the trump Suit Cards on hands, need to check with the trump suit of current round
             // from the round info  clas
-            legalPlayedCard = getCardFromTrumpSuitList(trumpSuitCards,player,"high");
+            smartPlayedCard = getCardFromTrumpSuitList(trumpSuitCards,player,"high");
         } // If the current player is not the first player,
         else {
             // Obtain the relevant statistic from roundInfo
@@ -54,17 +59,17 @@ public class smartStrategy implements AbleToPlayCard {
 
 
                 if (rankGreater(biggestCard, currentWinningCard)) {
-                    legalPlayedCard = biggestCard;
+                    smartPlayedCard = biggestCard;
                 }
                 else {
-                    legalPlayedCard = lowestCard;
+                    smartPlayedCard = lowestCard;
                 }
             }
             // if the current player does not have the cards with lead suit
             else {
 
                 // Check if the current player has the trumpsuit cards
-                legalPlayedCard = getCardFromTrumpSuitList(trumpSuitCards, player, "low");
+                smartPlayedCard = getCardFromTrumpSuitList(trumpSuitCards, player, "low");
 
 
             }
@@ -72,7 +77,7 @@ public class smartStrategy implements AbleToPlayCard {
 
 
         // Inactive mode for the player, meaning that the player currently is not trying to pursue a win
-        return legalPlayedCard;
+        return smartPlayedCard;
 
     }
     	// 用于比较两张手牌的大小

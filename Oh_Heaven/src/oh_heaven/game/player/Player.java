@@ -4,27 +4,24 @@ import ch.aplu.jcardgame.Card;
 import ch.aplu.jcardgame.Hand;
 import oh_heaven.game.RoundInfo;
 
-
-
 public abstract class Player {
 
-    protected int score; // 记录一场比赛中玩家的当前的分数
-    protected int trick; // 当前一场比赛中 的已经赢得回合的数量
-    protected int bid; // 在一场比赛中， 预测的能够赢回合的总次数
-    protected Hand hand; // 当前玩家的手牌
+    protected int score; // Records the scores of each player
+    protected int nbWon; // Records the number of subrounds that the player has won so fars 
+    protected int bid; // bid how many tricks in total a player can win in a game
+    protected Hand hand; // current player's hand cards
 
+    // card selected by player
     protected Card selectedCard = null;
 
-    protected final int PLAYERINDEX; 
-    
+    protected final int PLAYERINDEX;
 
-    public Player (int playerIndex) {
+    public Player(int playerIndex) {
         this.PLAYERINDEX = playerIndex;
     }
 
-    // Abstract Signatures
+    // Abstract method for playing one card to the trick
     public abstract Card playOneCard(RoundInfo roundInfo);
-
 
 
     // Getters and Setters
@@ -41,16 +38,16 @@ public abstract class Player {
         return this;
     }
 
-    public int getTrick() {
-        return this.trick;
+    public int getNbWon() {
+        return this.nbWon;
     }
 
-    public void setTrick(int trick) {
-        this.trick = trick;
+    public void setNbWon(int nbWon) {
+        this.nbWon = nbWon;
     }
 
-    public Player trick(int trick) {
-        setTrick(trick);
+    public Player nbWon(int nbWon) {
+        setNbWon(nbWon);
         return this;
     }
 
@@ -96,8 +93,4 @@ public abstract class Player {
     public int getPLAYERINDEX() {
         return this.PLAYERINDEX;
     }
-
-
-    
 }
-

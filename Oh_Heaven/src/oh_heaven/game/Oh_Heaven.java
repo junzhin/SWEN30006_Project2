@@ -256,12 +256,7 @@ public class Oh_Heaven extends CardGame {
 			hands[i].sort(Hand.SortType.SUITPRIORITY, true);
 		}
 		/*check if player is a humna player, then set card listener*/
-		// 这里要改一下， 注意检查, 查重警告
-		for (Player player: players) {
-			if (player instanceof HumanPlayer) {
-				((HumanPlayer)player).initialiseCardListener();
-			}
-		}
+        setHumanPlayer();
 		// graphics
 		RowLayout[] layouts = new RowLayout[nbPlayers];
 		for (int i = 0; i < nbPlayers; i++) {
@@ -277,7 +272,25 @@ public class Oh_Heaven extends CardGame {
 		// hands[i].setVerso(true); // You do not need to use or change this code.
 		// End graphics
 	}
+    private void setHumanPlayer() {
+        for (Player player: players) {
+			if (player instanceof HumanPlayer) {
+                System.out.println("enter humna player");
+				initialiseCardListener(player);
+			}
+		}
+    }
 
+    private void initialiseCardListener(Player player) {
+        HumanPlayer humanPlayer = (HumanPlayer)player;
+        CardListener cardListener = new CardAdapter()  // Human Player plays card
+        {
+            public void leftDoubleClicked(Card card) {
+                humanPlayer.setSelectedCard(card);
+                humanPlayer.getHand().setTouchEnabled(false); }
+        };
+        humanPlayer.getHand().addCardListener(cardListener);
+    }
 
 
 	/**

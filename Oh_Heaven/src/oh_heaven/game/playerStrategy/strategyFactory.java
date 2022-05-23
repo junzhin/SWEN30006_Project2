@@ -3,8 +3,14 @@ package oh_heaven.game.playerStrategy;
 
 public class strategyFactory {
 
+    /**  
+    *Single Object for the strateFactory Class 
+    */
     private static strategyFactory instance = null;
-    
+
+    /**
+    *Getter for single point of access
+    */
     public static synchronized strategyFactory getInstance(){
         if (instance == null){
             instance = new strategyFactory();
@@ -12,6 +18,9 @@ public class strategyFactory {
         return instance;
     }
 
+    /**
+    * Factory for creating the corresponding Strategy
+    */
     public AbleToPlayCard getStrategyImplementation(String strategyType) {
 
         AbleToPlayCard newStrategy = null;

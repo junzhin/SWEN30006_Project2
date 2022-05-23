@@ -12,7 +12,7 @@ public class PropertiesLoader {
     
     public static final String DEFAULT_DIRECTORY_PATH = "properties/";
 
-
+    /**load properties file, based on code in projet 1 */
     public static Properties loadPropertiesFile(String propertiesFile) {
         if (propertiesFile == null) {
             try (InputStream input = new FileInputStream( DEFAULT_DIRECTORY_PATH + "runmode.properties")) {
@@ -43,6 +43,7 @@ public class PropertiesLoader {
         return null;
     }
 
+    /*load the player types from the property file as the arraylist */
     public static ArrayList<String> loadPlayerTypes(Properties properties) {
         ArrayList<String> playerTypes = new ArrayList<>();
         for (int i=0;i<4;i++) {

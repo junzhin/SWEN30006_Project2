@@ -1,11 +1,12 @@
 package oh_heaven.game.player;
-import java.util.Optional;
  
 
 public class PlayerFactory {
 
+    // instance of the factory
     private static PlayerFactory instance = null;
 
+    // Getter for singleton factory of players
     public static synchronized PlayerFactory getInstance() {
         if (instance == null) {
             instance = new PlayerFactory();
@@ -13,9 +14,9 @@ public class PlayerFactory {
         return instance;
     }
 
+    // Creator of different types of factory
     public Player getPlayerFactoryImplementation(String playerType, int playerIndex) {
         Player newPlayer  = null;
-
     
         if (playerType.equals("human")) {
             newPlayer = new HumanPlayer(playerIndex);

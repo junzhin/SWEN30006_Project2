@@ -21,7 +21,7 @@ public abstract class Player {
     }
 
     // Abstract method for playing one card to the trick
-    public abstract Card playOneCard(TrickStatistics roundInfo);
+    public abstract Card playOneCard(TrickStatistics trickStatistics);
 
 
     // Getters and Setters

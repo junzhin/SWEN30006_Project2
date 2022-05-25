@@ -14,7 +14,7 @@ public class HumanPlayer extends Player {
 
     // Generate one player Card
     @Override
-    public Card playOneCard(TrickStatistics roundInfo) {
+    public Card playOneCard(TrickStatistics trickStatistics) {
         selectedCard = null;
         hand.setTouchEnabled(true);
         // delay for the selecting card

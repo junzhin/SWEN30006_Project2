@@ -35,7 +35,7 @@ public class strategyFactory {
         } else {
             newStrategy = new legalStrategy();
         }
-        
+       
         return newStrategy;
     }
 }

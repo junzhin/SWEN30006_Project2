@@ -19,9 +19,9 @@ public class NonHumanPlayer extends Player{
 
     // Generate one player Card
     @Override
-    public Card playOneCard(TrickStatistics roundInfo) {
+    public Card playOneCard(TrickStatistics trickStatistics) {
         // stratergy pattern to play the card based on the stratergy the play has.
-        return PLAYERSTRATEGY.generateOneMove(this,roundInfo);
+        return PLAYERSTRATEGY.generateOneMove(this, trickStatistics);
     }
     
     

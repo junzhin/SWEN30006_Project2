@@ -25,21 +25,17 @@ public class strategyFactory {
 
         AbleToPlayCard newStrategy = null;
         String processString = strategyType.toLowerCase();
+
+        if(processString.equals("smart")){
+            newStrategy = new smartStrategy();
+        } else if (processString.equals("random")){
+            newStrategy = new randomStrategy();
+        } else if (processString.equals("legal")){
+            newStrategy = new legalStrategy();
+        } else {
+            newStrategy = new legalStrategy();
+        }
         
-        switch (processString) {
-            case "smart":
-                newStrategy = new smartStrategy();
-                break;
-            case "random":
-                newStrategy = new randomStrategy();
-                break;
-            case "legal":
-                newStrategy = new legalStrategy();
-                break;
-            default:
-                newStrategy = new legalStrategy();
-            };
-       
         return newStrategy;
     }
 }

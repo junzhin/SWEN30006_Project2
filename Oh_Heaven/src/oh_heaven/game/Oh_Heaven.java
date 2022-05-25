@@ -213,7 +213,7 @@ public class Oh_Heaven extends CardGame {
 		if (tempStoringVariable != null) {
 			this.thinkingTime = Integer.parseInt(tempStoringVariable);
 		}
-	
+
 		playerType.addAll(PropertiesLoader.loadPlayerTypes(properties));
 	}
 
@@ -259,7 +259,9 @@ public class Oh_Heaven extends CardGame {
         setHumanPlayer();
 		// graphics
 		RowLayout[] layouts = new RowLayout[nbPlayers];
+		System.out.println("nbPlayers:"+nbPlayers);
 		for (int i = 0; i < nbPlayers; i++) {
+			System.out.println("index:"+i);
 			layouts[i] = new RowLayout(handLocations[i], handWidth);
 			layouts[i].setRotationAngle(90 * i);
 			hands[i].setView(this, layouts[i]);
@@ -326,7 +328,7 @@ public class Oh_Heaven extends CardGame {
 
 	/****One Round of the game ****/
 
-	private void playRound(TrickStatistics roundInfo) {
+	private void playRound(TrickStatistics trickStatistics) {
 
 
 		// Select and display trump suit
@@ -344,7 +346,7 @@ public class Oh_Heaven extends CardGame {
 		Card winningCard;// currentWinnning Card for a SubRound
 		Suit lead;// The suit of the leading
 
-		roundInfo.setCurrentTrump(trumps);
+		trickStatistics.setCurrentTrump(trumps);
 
 
 		int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
@@ -362,7 +364,7 @@ public class Oh_Heaven extends CardGame {
 			trick = new Hand(deck);
 			selected = null;
 			lead = null;
-			roundInfo.setLead(null);
+			trickStatistics.setLead(null);
 			winner = 0;
 			winningCard = null;
 
@@ -378,7 +380,7 @@ public class Oh_Heaven extends CardGame {
 				setStatusText("Player " + nextPlayer + " thinking...");
 		        delay(thinkingTime);
 				
-				selected = players.get(nextPlayer).playOneCard(roundInfo);
+				selected = players.get(nextPlayer).playOneCard(trickStatistics);
 
 				
 				// Follow with selected card
@@ -427,9 +429,9 @@ public class Oh_Heaven extends CardGame {
 				}
 
 				// Update the round-Info 
-				roundInfo.setLead(lead);
-				roundInfo.setCurrentWinner(winner);
-				roundInfo.setCurrentWinningCard(winningCard);
+				trickStatistics.setLead(lead);
+				trickStatistics.setCurrentWinner(winner);
+				trickStatistics.setCurrentWinningCard(winningCard);
 			}
 
 			// Graphical and game bebviouring settings

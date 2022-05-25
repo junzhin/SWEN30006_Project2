@@ -97,6 +97,7 @@ Workshop 14 14:30 - 16:30
     - https://lucid.app/lucidchart/5faca5b8-28cb-4a7a-b8e5-b56f8df94aa1/edit?viewport_loc=665%2C-319%2C3298%2C1856%2C0_0&invitationId=inv_f6d19d18-e7bf-4503-8728-de5841aa1364#
     - https://lucid.app/lucidchart/e2ced80a-b7e1-4662-bc70-3ccb2cb37ab9/edit?viewport_loc=-135%2C-231%2C2522%2C1419%2C0_0&invitationId=inv_6674eb0c-93b9-46dc-8738-c06021ba91bf#
     - https://lucid.app/lucidchart/6c86a49f-ab76-4d64-abb6-93bd85b60574/edit?viewport_loc=-184%2C-182%2C2294%2C1291%2C0_0&invitationId=inv_4718ab18-bec1-49f8-ba94-4c50a2e63f95#
+    - https://lucid.app/lucidchart/dabfdd60-68c2-465d-83f6-e88707458119/edit?viewport_loc=-1309%2C-60%2C3832%2C2265%2C0_0&invitationId=inv_a7d06735-5539-4f5f-94cb-190294f5a241#
 
 ---
 ## Software Installaition And Running:

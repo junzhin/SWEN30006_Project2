@@ -1,0 +1,10 @@
+{
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar"
+        ],
+        "exclude": [
+            "f:\\Oh_Heaven\\lib\\JGameGrid.jar"
+        ]
+    }
+}

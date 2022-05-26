@@ -478,12 +478,12 @@ public class Oh_Heaven extends CardGame {
 		for (int i = 0; i < nbRounds; i++) {
 
 			// Initialize the roundData Recorder 
-			TrickStatistics roundInfo = new TrickStatistics();
+			TrickStatistics trickStatistics = new TrickStatistics();
 
 			initTricks();
 			initRound();
-			playRound(roundInfo);
-			updateScores(roundInfo);
+			playRound(trickStatistics);
+			updateScores(trickStatistics);
 		}
 
 		for (int i = 0; i < nbPlayers; i++)

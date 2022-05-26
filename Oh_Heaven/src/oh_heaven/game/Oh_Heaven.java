@@ -91,6 +91,9 @@ public class Oh_Heaven extends CardGame {
 	// Prediction of the number of wining time for one game
 	private int[] bids = new int[nbPlayers];
 
+	// Initialize the roundData Recorder
+	private TrickStatistics trickStatistics;
+
 	Font bigFont = new Font("Serif", Font.BOLD, 36);
 
 	// Setting random seed for the game behaviour
@@ -478,7 +481,7 @@ public class Oh_Heaven extends CardGame {
 		for (int i = 0; i < nbRounds; i++) {
 
 			// Initialize the roundData Recorder 
-			TrickStatistics trickStatistics = new TrickStatistics();
+			trickStatistics = new TrickStatistics();
 
 			initTricks();
 			initRound();

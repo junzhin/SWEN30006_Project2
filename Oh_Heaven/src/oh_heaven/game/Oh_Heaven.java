@@ -13,6 +13,9 @@ import java.awt.Font;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.management.loading.PrivateClassLoader;
+import javax.naming.InitialContext;
+
 @SuppressWarnings("serial")
 
 public class Oh_Heaven extends CardGame {
@@ -246,7 +249,7 @@ public class Oh_Heaven extends CardGame {
 		// }
 	}
 
-	private Card selected;
+
 
 	private void initRound() {
 		hands = new Hand[nbPlayers];
@@ -322,7 +325,6 @@ public class Oh_Heaven extends CardGame {
 		}
 
 		roundinfo.setScoresForPlayers(scores);
-		 
 	}
 
 	/****************** End of Initialization and Updating **************/
@@ -331,6 +333,14 @@ public class Oh_Heaven extends CardGame {
 
 	/****One Round of the game ****/
 
+	private Card selected;
+	private Hand trick; // cards played before for one round
+	private int winner;// currentWinner for a SubRound 
+	private Card winningCard;// currentWinnning Card for a SubRound
+	private Suit lead;// The suit of the leading
+	private int nextPlayer;
+
+
 	private void playRound(TrickStatistics trickStatistics) {
 
 
@@ -338,21 +348,16 @@ public class Oh_Heaven extends CardGame {
 		// For the first subround, a lead player is randomly chosen
 		final Suit trumps = randomEnum(Suit.class);
 		final Actor trumpsActor = new Actor("sprites/" + trumpImage[trumps.ordinal()]);
-
 		
-
+	
+	
 		addActor(trumpsActor, trumpsActorLocation);// Graphical Interface for player and its player location
 		// End trump suit
-		
-		Hand trick; // cards played before for one round
-		int winner;// currentWinner for a SubRound 
-		Card winningCard;// currentWinnning Card for a SubRound
-		Suit lead;// The suit of the leading
+
 
 		trickStatistics.setCurrentTrump(trumps);
 
-
-		int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
+		nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 
 		initBids(trumps, nextPlayer);
 		// initScore();
@@ -374,7 +379,24 @@ public class Oh_Heaven extends CardGame {
 
 			// One complete sub-round
 			for (int j = 0; j < nbPlayers; j++){
+				playOneSubRound(trumps);
+			}
 
+			// Graphical and game bebviouring settings
+			delay(600);
+			trick.setView(this, new RowLayout(hideLocation, 0));
+			trick.draw();
+			nextPlayer = winner;
+			
+			setStatusText("Player " + nextPlayer + " wins trick.");
+			tricks[nextPlayer]++;
+			updateScoreGraphics(nextPlayer);
+		}
+		removeActor(trumpsActor);
+	}
+
+	private void playOneSubRound(Suit trumps){
+		
 				// if it is not lead of a sub-round
 				if (lead != null && ++nextPlayer >= nbPlayers){
 					nextPlayer = 0; // From last back to first
@@ -435,19 +457,7 @@ public class Oh_Heaven extends CardGame {
 				trickStatistics.setLead(lead);
 				trickStatistics.setCurrentWinner(winner);
 				trickStatistics.setCurrentWinningCard(winningCard);
-			}
 
-			// Graphical and game bebviouring settings
-			delay(600);
-			trick.setView(this, new RowLayout(hideLocation, 0));
-			trick.draw();
-			nextPlayer = winner;
-			
-			setStatusText("Player " + nextPlayer + " wins trick.");
-			tricks[nextPlayer]++;
-			updateScoreGraphics(nextPlayer);
-		}
-		removeActor(trumpsActor);
 	}
 
 	/**** End of One Round of the game ****/
@@ -463,9 +473,8 @@ public class Oh_Heaven extends CardGame {
 		
 	}
 
-	/**** Running Process of the Game Program *****/
-	public Oh_Heaven(Properties gameProperies) {
-		super(700, 700, 30);
+	private void InitialGame(Properties gameProperies ){
+	
 		setTitle("Oh_Heaven (V" + version + ") Constructed for UofM SWEN30006 with JGameGrid (www.aplu.ch)");
 		setStatusText("Initializing...");
 
@@ -477,18 +486,17 @@ public class Oh_Heaven extends CardGame {
 		initScores();
 		initinitScoreForGraphicalPurpose();
 
-		// 开始进行每一轮的记录
-		for (int i = 0; i < nbRounds; i++) {
+	}
 
-			// Initialize the roundData Recorder 
-			trickStatistics = new TrickStatistics();
+	private void playOneRound(TrickStatistics trickStatistics){
+		initTricks();
+		initRound();
+		playRound(trickStatistics);
+		updateScores(trickStatistics);
+	}
 
-			initTricks();
-			initRound();
-			playRound(trickStatistics);
-			updateScores(trickStatistics);
-		}
-
+	private void TerminalStateOfGame(){
+		
 		for (int i = 0; i < nbPlayers; i++)
 			updateScoreGraphics(i);
 		int maxScore = 0;
@@ -513,6 +521,23 @@ public class Oh_Heaven extends CardGame {
 		addActor(new Actor("sprites/gameover.gif"), textLocation);
 		setStatusText(winText);
 		refresh();
+	}
+
+	/**** Running Process of the Game Program *****/
+	public Oh_Heaven(Properties gameProperies) {
+
+		super(700, 700, 30);
+		InitialGame(gameProperies);
+
+		// Iterate through correct number of round
+		for (int i = 0; i < nbRounds; i++) {
+
+			// Initialize the roundData Recorder 
+			trickStatistics = new TrickStatistics();
+			playOneRound(trickStatistics);
+		
+		}
+		TerminalStateOfGame();
 	}
 
 	/**** End of Running Process of the Game Program *****/

@@ -22,11 +22,11 @@ public class smartStrategy implements AbleToPlayCard {
      * Generate one card to play for current subround
      */
     @Override
-    public Card generateOneMove(Player player, TrickStatistics currentRoundInfo) {
+    public Card generateOneMove(Player player, TrickStatistics trickStatistics) {
         Card smartPlayedCard;
-        Oh_Heaven.Suit leadSuit = currentRoundInfo.getLead();
+        Oh_Heaven.Suit leadSuit = trickStatistics.getLead();
         Hand playerHand = player.getHand();
-        Oh_Heaven.Suit trumpSuit = currentRoundInfo.getCurrentTrump();
+        Oh_Heaven.Suit trumpSuit = trickStatistics.getCurrentTrump();
         ArrayList<Card> trumpSuitCards = playerHand.getCardsWithSuit(trumpSuit);
 
 
@@ -46,7 +46,7 @@ public class smartStrategy implements AbleToPlayCard {
         } // If the current player is not the first player,
         else {
             // Obtain the relevant statistic from roundInfo
-            Card currentWinningCard = currentRoundInfo.getCurrentWinningCard();
+            Card currentWinningCard = trickStatistics.getCurrentWinningCard();
             ArrayList<Card> leadSuitCard = playerHand.getCardsWithSuit(leadSuit);
 
             // if the current player has the cards with the lead suit
@@ -81,11 +81,11 @@ public class smartStrategy implements AbleToPlayCard {
 
     }
     	// 用于比较两张手牌的大小
-	public boolean rankGreater(Card card1, Card card2) {
+	private boolean rankGreater(Card card1, Card card2) {
 		return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
 	}
 
-    public void rankCards(ArrayList<Card> cards) {
+    private void rankCards(ArrayList<Card> cards) {
         Collections.sort(cards, new Comparator<Card>() {
             @Override
             public int compare(Card o1, Card o2) {
@@ -95,7 +95,7 @@ public class smartStrategy implements AbleToPlayCard {
 
     }
 
-    public Card getCardFromTrumpSuitList(ArrayList<Card> trumpSuitCards,Player player, String neededCard) {
+    private Card getCardFromTrumpSuitList(ArrayList<Card> trumpSuitCards,Player player, String neededCard) {
         if (trumpSuitCards.size()!=0) {
             // Sorting the trump suit cards if exist
             rankCards(trumpSuitCards);

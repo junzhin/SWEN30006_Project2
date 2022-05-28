@@ -382,11 +382,8 @@ public class Oh_Heaven extends CardGame {
 			winner = 0;
 			winningCard = null;
 
-
 			// One complete sub-round
-			for (int j = 0; j < nbPlayers; j++){
-				playOneSubRound(trumps);
-			}
+			playOneSubRound(trumps);
 
 			// Graphical and game bebviouring settings
 			delay(600);
@@ -399,10 +396,14 @@ public class Oh_Heaven extends CardGame {
 			updateScoreGraphics(nextPlayer);
 		}
 		removeActor(trumpsActor);
+	
 	}
 
+
 	private void playOneSubRound(Suit trumps){
-		
+			// One complete sub-round
+			for (int j = 0; j < nbPlayers; j++){
+				
 				// if it is not lead of a sub-round
 				if (lead != null && ++nextPlayer >= nbPlayers){
 					nextPlayer = 0; // From last back to first
@@ -463,8 +464,10 @@ public class Oh_Heaven extends CardGame {
 				trickStatistics.setLead(lead);
 				trickStatistics.setCurrentWinner(winner);
 				trickStatistics.setCurrentWinningCard(winningCard);
+			}
 
 	}
+
 
 	/**** End of One Round of the game ****/
 	/*

@@ -45,7 +45,7 @@ public class Oh_Heaven extends CardGame {
 	// number of round for each game
 	public int nbRounds = 3;
 	// Additional Bonus Score 
-	public final int madeBidBonus = 10;
+	public int madeBidBonus = 10;
 
 	// Storing player types and player
 	private ArrayList<String> playerType = new ArrayList<>();
@@ -218,6 +218,12 @@ public class Oh_Heaven extends CardGame {
 		// reassign the seed value to random class
 		if (tempStoringVariable != null) {
 			this.thinkingTime = Integer.parseInt(tempStoringVariable);
+		}
+
+		tempStoringVariable = properties.getProperty("madeBidBonus");
+		// reassign the seed value to random class
+		if (tempStoringVariable != null) {
+			this.madeBidBonus = Integer.parseInt(tempStoringVariable);
 		}
 
 		playerType.addAll(PropertiesLoader.loadPlayerTypes(properties));

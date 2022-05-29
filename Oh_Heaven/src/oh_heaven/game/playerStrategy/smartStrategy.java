@@ -104,15 +104,7 @@ public class smartStrategy implements AbleToPlayCard {
             return trumpSuitCards.get(0);
         } else {
             player.getHand().sort(Hand.SortType.RANKPRIORITY, false);
-            System.out.println(
-                "+++Start++++++++++++++++++++++++++"
-            );
-            for (Card eachCard: player.getHand().getCardList()){
-                System.out.println(eachCard.toString());
-            }
-            System.out.println(
-                    "+-End++++++++++++++++++++++++++++"
-            );
+
             if (neededCard.equals("high")) {
                 System.out.println("give the highest card");
                 return player.getHand().getFirst();

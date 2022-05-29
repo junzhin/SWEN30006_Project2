@@ -90,9 +90,9 @@ Workshop 14 14:30 - 16:30
     - <u>https://www.overleaf.com/3295722264jqmccgwbfwtm</u>
 - Notion NoteBook Link:
     - <u> https://www.notion.so/Assignment2-e7975df0c393437e980677258291ae21</u>
-- Design class diagram1: 
+- Design class diagram: 
     - <u>https://lucid.app/lucidchart/41b6e425-57ba-4518-91ef-8c7e3b139cae/edit?viewport_loc=483%2C51%2C1008%2C505%2C0_0&invitationId=inv_56729a7d-4fed-4999-94fa-688308478745</u>
-- Sequence class diagram1:
+- Sequence class diagramS:
     - https://lucid.app/lucidchart/a486ac9e-5e93-4792-8dca-0f1f6d3ae74b/edit?viewport_loc=125%2C-7%2C2507%2C1411%2C0_0&invitationId=inv_70a7d190-70be-4575-9c35-87f0bbbd70f2#
     - https://lucid.app/lucidchart/5faca5b8-28cb-4a7a-b8e5-b56f8df94aa1/edit?viewport_loc=665%2C-319%2C3298%2C1856%2C0_0&invitationId=inv_f6d19d18-e7bf-4503-8728-de5841aa1364#
     - https://lucid.app/lucidchart/e2ced80a-b7e1-4662-bc70-3ccb2cb37ab9/edit?viewport_loc=-135%2C-231%2C2522%2C1419%2C0_0&invitationId=inv_6674eb0c-93b9-46dc-8738-c06021ba91bf#

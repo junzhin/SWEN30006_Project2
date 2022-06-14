@@ -51,16 +51,17 @@ The Oh Heaven game play is briefly described below.
 
 ## Program Improvements And Extensions To The Original Version:
 ### Additional Npc Types
-- Smart Player
-
-- Legal Player (Follow the game Rules with a "Random selection of playing a cardd" Strategy)
+- Smart Player: the purpose of this smart player/agent in this program is to produce a interface that allows any future extended versions of "smart agent", as we apply the strategy pattern here. 
+- Legal Player (Follow the game Rules with a "Random selection of playing a cardd" Strategy): This is a basic type of game agent that only follow the game rules and the strategy of randomly playing one card.
 
 ### More Configurable Parameters through The Properties Folder
 **There are two types of properties files used in this game program:**
 1. Specific Game Options:
+    - Allow the settings of the game agent types if there are defined in the program.
 2. Overall Game Options(Choose which specific game option profile to run):
-
+    - Control the delay of thinking time in the time unit of ms.
 ### Support Flexitble Intefact to alternative Bidding Strategies
+3. Another interface to any potential bidding strategies is also considered,  it is not implemented but mentioned in the report.
 ---
 
 ## Team Members
@@ -86,6 +87,9 @@ Workshop 14 14:30 - 16:30
 ---
 ## Report And Software Design Diagrams:
 - Design class diagram1: 
+
+![SMD-Project2-Design Class Diagram](assets/SMD-Project2-Design%20Class%20Diagram.png)
+
 - Sequence class diagram1:
 ![project2 playerfactory sequence diagram](assets/project2%20playerfactory%20sequence%20diagram.png)
 ![project2-refer of stratergy factory](assets/project2-refer%20of%20stratergy%20factory.png)

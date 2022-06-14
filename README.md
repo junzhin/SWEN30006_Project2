@@ -85,20 +85,14 @@ Workshop 14 14:30 - 16:30
 
 ---
 ## Report And Software Design Diagrams:
-
-- The report link is at 
-    - <u>https://www.overleaf.com/3295722264jqmccgwbfwtm</u>
-- Notion NoteBook Link:
-    - <u> https://www.notion.so/Assignment2-e7975df0c393437e980677258291ae21</u>
 - Design class diagram1: 
-    - <u>https://lucid.app/lucidchart/41b6e425-57ba-4518-91ef-8c7e3b139cae/edit?viewport_loc=483%2C51%2C1008%2C505%2C0_0&invitationId=inv_56729a7d-4fed-4999-94fa-688308478745</u>
 - Sequence class diagram1:
-    - https://lucid.app/lucidchart/a486ac9e-5e93-4792-8dca-0f1f6d3ae74b/edit?viewport_loc=125%2C-7%2C2507%2C1411%2C0_0&invitationId=inv_70a7d190-70be-4575-9c35-87f0bbbd70f2#
-    - https://lucid.app/lucidchart/5faca5b8-28cb-4a7a-b8e5-b56f8df94aa1/edit?viewport_loc=665%2C-319%2C3298%2C1856%2C0_0&invitationId=inv_f6d19d18-e7bf-4503-8728-de5841aa1364#
-    - https://lucid.app/lucidchart/e2ced80a-b7e1-4662-bc70-3ccb2cb37ab9/edit?viewport_loc=-135%2C-231%2C2522%2C1419%2C0_0&invitationId=inv_6674eb0c-93b9-46dc-8738-c06021ba91bf#
-    - https://lucid.app/lucidchart/6c86a49f-ab76-4d64-abb6-93bd85b60574/edit?viewport_loc=-184%2C-182%2C2294%2C1291%2C0_0&invitationId=inv_4718ab18-bec1-49f8-ba94-4c50a2e63f95#
-    - https://lucid.app/lucidchart/dabfdd60-68c2-465d-83f6-e88707458119/edit?viewport_loc=-1309%2C-60%2C3832%2C2265%2C0_0&invitationId=inv_a7d06735-5539-4f5f-94cb-190294f5a241#
-    - https://lucid.app/lucidchart/6c3dc7ba-58e0-438a-b63d-a2e5c89b65b1/edit?viewport_loc=-634%2C-46%2C2370%2C1359%2C0_0&invitationId=inv_c49e73c6-dc9a-4028-b0e6-a1a022a80dec#
+![project2 playerfactory sequence diagram](assets/project2%20playerfactory%20sequence%20diagram.png)
+![project2-refer of stratergy factory](assets/project2-refer%20of%20stratergy%20factory.png)
+![Project2-InitialiseProperties](assets/Project2-InitialiseProperties.png)
+![project2 dynamic playRound design diagram](assets/project2%20dynamic%20playRound%20design%20diagram.png)
+![project2 dynamic legalStrategy playRound design diagram](assets/project2%20dynamic%20legalStrategy%20playRound%20design%20diagram.png)
+
 
 ---
 ## Software Installaition And Running:

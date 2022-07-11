@@ -90,7 +90,7 @@ Workshop 14 14:30 - 16:30
 
 ![SMD-Project2-Design Class Diagram](assets/SMD-Project2-Design%20Class%20Diagram.png)
 
-- Sequence class diagram1:
+- Sequence class diagram:
 ![project2 playerfactory sequence diagram](assets/project2%20playerfactory%20sequence%20diagram.png)
 ![project2-refer of stratergy factory](assets/project2-refer%20of%20stratergy%20factory.png)
 ![Project2-InitialiseProperties](assets/Project2-InitialiseProperties.png)
